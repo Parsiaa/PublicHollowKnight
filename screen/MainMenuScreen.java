@@ -31,6 +31,11 @@ public class MainMenuScreen extends ScreenAdapter {
         "background/bg3.png"
     };
 
+    /** The HOLLOW KNIGHT: VOIDHEART title, always drawn on top of whichever background is active. */
+    private static final String TITLE_PATH = "background/title.png";
+    // Title is fit (aspect preserved) into this band above the menu items, centred on TITLE_CY.
+    private static final float TITLE_MAX_W = 560f, TITLE_MAX_H = 150f, TITLE_CY = 512f;
+
     // On-screen "change background" button (virtual 800x600 coords, y-up).
     private static final Rectangle BG_BUTTON = new Rectangle(520f, 40f, 240f, 40f);
 
@@ -44,6 +49,7 @@ public class MainMenuScreen extends ScreenAdapter {
 
     private final List<Texture> backgrounds = new ArrayList<>();
     private int background = 0;
+    private Texture title;
 
     public MainMenuScreen(HollowKnightGame game) {
         this.game = game;
@@ -64,6 +70,9 @@ public class MainMenuScreen extends ScreenAdapter {
             if (Gdx.files.internal(path).exists()) {
                 backgrounds.add(new Texture(Gdx.files.internal(path)));
             }
+        }
+        if (Gdx.files.internal(TITLE_PATH).exists()) {
+            title = new Texture(Gdx.files.internal(TITLE_PATH));
         }
     }
 
@@ -96,6 +105,13 @@ public class MainMenuScreen extends ScreenAdapter {
         if (!backgrounds.isEmpty()) {
             game.batch.setColor(Color.WHITE);
             game.batch.draw(backgrounds.get(background), 0, 0, 800, 600);
+        }
+
+        if (title != null) {
+            game.batch.setColor(Color.WHITE);
+            float scale = Math.min(TITLE_MAX_W / title.getWidth(), TITLE_MAX_H / title.getHeight());
+            float w = title.getWidth() * scale, h = title.getHeight() * scale;
+            game.batch.draw(title, (800 - w) / 2f, TITLE_CY - h / 2f, w, h);
         }
 
         for (int i = 0; i < items.length; i++) {
@@ -146,6 +162,7 @@ public class MainMenuScreen extends ScreenAdapter {
     private void disposeBackgrounds() {
         for (Texture t : backgrounds) t.dispose();
         backgrounds.clear();
+        if (title != null) { title.dispose(); title = null; }
     }
 
     @Override
