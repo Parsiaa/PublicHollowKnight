@@ -106,7 +106,10 @@ public class FalseKnightController {
     }
 
     private void faceKnight() {
-        if (boss.getState() == FalseKnight.State.CHARGE_RUN) return;
+        // Don't re-orient mid-charge, and stay frozen for the whole stun sequence so the
+        // dazed boss doesn't snap to mirror the knight as the player crosses sides.
+        if (boss.getState() == FalseKnight.State.CHARGE_RUN
+                || boss.getState() == FalseKnight.State.STUN) return;
         float bx = boss.getBounds().x + boss.getBounds().width / 2f;
         float kx = knight.getBoundingBox().x + knight.getBoundingBox().width / 2f;
         boss.setFacingRight(kx >= bx);

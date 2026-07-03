@@ -15,7 +15,8 @@ import HollowKnight.hollowknight.utils.ZoteAssetManager;
 
 public class HollowKnightGame extends Game {
 
-    private static final String FONT_PATH = "font/TrajanPro-Regular.ttf";
+    /** Trajan is the game-wide font; every piece of text should be generated from it. */
+    public static final String FONT_PATH = "font/TrajanPro-Regular.ttf";
 
     public SpriteBatch batch;
     public GameAssetManager assetManager;

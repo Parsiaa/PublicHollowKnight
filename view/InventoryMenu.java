@@ -10,7 +10,9 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import HollowKnight.hollowknight.HollowKnightGame;
 import HollowKnight.hollowknight.model.Knight;
+import HollowKnight.hollowknight.utils.FontFactory;
 
 /**
  * Full-screen inventory overlay shown when the player presses I.
@@ -71,10 +73,10 @@ public class InventoryMenu {
         this.uiCamera = new OrthographicCamera();
         uiCamera.setToOrtho(false, screenW, screenH);
         this.sr     = new ShapeRenderer();
-        this.font   = new BitmapFont();
+        // Use the game-wide Trajan font (owned + disposed by this menu) instead of libGDX's default.
+        this.font   = FontFactory.generate(HollowKnightGame.FONT_PATH, 18);
         this.layout = new GlyphLayout();
 
-        font.getData().setScale(1.15f);
         font.setColor(Color.WHITE);
 
         // Grid centred horizontally, sits in the middle third of the screen
