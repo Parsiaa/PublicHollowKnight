@@ -165,6 +165,7 @@ public class GameScreen extends ScreenAdapter {
             falseKnightRenderer = new FalseKnightRenderer(falseKnightAssets);
             bossController = new FalseKnightController(boss, player, level, gameCamera,
                     game.audio, level.getArena());
+            combat.setBoss(boss);
         }
 
         knightRenderer = new KnightRenderer(game.assetManager);
@@ -239,7 +240,9 @@ public class GameScreen extends ScreenAdapter {
         Rectangle nail = attacking ? combat.buildNailHitbox(s, player.getBoundingBox()) : null;
         wallManager.update(dt, nail, attacking);
 
-        enemyManager.update(dt, player);
+        boolean bossActive = bossController != null
+                && bossController.isStarted() && !bossController.isDefeated();
+        enemyManager.update(dt, player, bossActive);
         effectManager.update(dt, enemyManager.getEnemies(), player);
         combat.update();
 

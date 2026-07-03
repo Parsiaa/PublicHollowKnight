@@ -12,6 +12,7 @@ import HollowKnight.hollowknight.utils.EnemyAssetManager;
 import HollowKnight.hollowknight.utils.FontFactory;
 import HollowKnight.hollowknight.utils.GameAssetManager;
 import HollowKnight.hollowknight.utils.ZoteAssetManager;
+import HollowKnight.hollowknight.view.MenuBackground;
 
 public class HollowKnightGame extends Game {
 
@@ -28,6 +29,8 @@ public class HollowKnightGame extends Game {
 
     public BitmapFont fontLarge;
     public BitmapFont fontMedium;
+
+    public MenuBackground menuBackground;
 
 
     @Override
@@ -49,6 +52,8 @@ public class HollowKnightGame extends Game {
         fontLarge = FontFactory.generate(FONT_PATH, 36);
         fontMedium = FontFactory.generate(FONT_PATH, 20);
 
+        menuBackground = new MenuBackground();
+
         setScreen(new MainMenuScreen(this));
     }
 
@@ -63,5 +68,6 @@ public class HollowKnightGame extends Game {
         audio.dispose();
         fontLarge.dispose();
         fontMedium.dispose();
+        if (menuBackground != null) menuBackground.dispose();
     }
 }

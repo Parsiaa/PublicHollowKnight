@@ -4,7 +4,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import HollowKnight.hollowknight.model.Enemy;
 import HollowKnight.hollowknight.model.Entity;
@@ -19,10 +21,12 @@ import HollowKnight.hollowknight.view.EnemyRenderer;
 public class EnemyManager {
 
     private static final float RESPAWN_DISTANCE = 600f;
+    private static final float RESPAWN_DELAY = 4f;   // a corpse must stay dead this long before it may respawn
     private static final float PLAYER_HIT_IFRAMES = 1.0f;
     private static final float HURT_DURATION = 0.18f;
 
     private final List<Enemy> enemies = new ArrayList<>();
+    private final Map<Enemy, Float> deadTime = new HashMap<>();
     private final EnemyRenderer renderer;
     private final Level level;
 
@@ -39,15 +43,26 @@ public class EnemyManager {
         for (Vector2 pos : level.getGuardianSpawns()) enemies.add(new CrystalGuardian(pos.x, pos.y, level));
     }
 
-    public void update(float dt, Knight player) {
+    public void update(float dt, Knight player, boolean bossActive) {
+        // While the arena boss fight is underway the roaming enemies stop acting entirely,
+        // so they no longer chase the player up to (or into) the arena.
+        if (bossActive) return;
+
         Rectangle playerBox = player.getBoundingBox();
 
         for (Enemy enemy : enemies) {
             if (enemy.isDead()) {
-                if (distanceToSpawn(enemy, playerBox) > RESPAWN_DISTANCE) enemy.respawn();
+                float t = deadTime.getOrDefault(enemy, 0f) + dt;
+                deadTime.put(enemy, t);
+                // Only bring an enemy back once it has stayed dead a while AND the player has moved away.
+                if (t >= RESPAWN_DELAY && distanceToSpawn(enemy, playerBox) > RESPAWN_DISTANCE) {
+                    enemy.respawn();
+                    deadTime.remove(enemy);
+                }
                 enemy.update(dt, playerBox);
                 continue;
             }
+            deadTime.remove(enemy);
             enemy.update(dt, playerBox);
 
             boolean shadowDash = player.charmSharpShadow

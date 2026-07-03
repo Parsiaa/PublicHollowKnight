@@ -5,36 +5,16 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import HollowKnight.hollowknight.HollowKnightGame;
-import HollowKnight.hollowknight.model.Settings;
 
 public class MainMenuScreen extends ScreenAdapter {
     private static final float ROW_H = 50f, TOP_Y = 420f, SPACING = 60f;
     private static final String BGM = "audio/menu.ogg";
-
-    /**
-     * Candidate background images. Drop your three files into assets/background/ using
-     * these names; any that are missing are skipped, so the menu still works without them.
-     */
-    private static final String[] BACKGROUND_PATHS = {
-        "background/bg1.png",
-        "background/bg2.png",
-        "background/bg3.png"
-    };
-
-    /** The HOLLOW KNIGHT: VOIDHEART title, always drawn on top of whichever background is active. */
-    private static final String TITLE_PATH = "background/title.png";
-    // Title is fit (aspect preserved) into this band above the menu items, centred on TITLE_CY.
-    private static final float TITLE_MAX_W = 560f, TITLE_MAX_H = 150f, TITLE_CY = 512f;
 
     // On-screen "change background" button (virtual 800x600 coords, y-up).
     private static final Rectangle BG_BUTTON = new Rectangle(520f, 40f, 240f, 40f);
@@ -47,10 +27,6 @@ public class MainMenuScreen extends ScreenAdapter {
     private int selected = 0;
     private int prevMx, prevMy;
 
-    private final List<Texture> backgrounds = new ArrayList<>();
-    private int background = 0;
-    private Texture title;
-
     public MainMenuScreen(HollowKnightGame game) {
         this.game = game;
         camera.setToOrtho(false, 800, 600);
@@ -59,21 +35,6 @@ public class MainMenuScreen extends ScreenAdapter {
     @Override
     public void show() {
         game.audio.playBgm(BGM);
-        loadBackgrounds();
-        background = backgrounds.isEmpty() ? 0
-                : ((Settings.get().menuBackground % backgrounds.size()) + backgrounds.size()) % backgrounds.size();
-    }
-
-    private void loadBackgrounds() {
-        disposeBackgrounds();
-        for (String path : BACKGROUND_PATHS) {
-            if (Gdx.files.internal(path).exists()) {
-                backgrounds.add(new Texture(Gdx.files.internal(path)));
-            }
-        }
-        if (Gdx.files.internal(TITLE_PATH).exists()) {
-            title = new Texture(Gdx.files.internal(TITLE_PATH));
-        }
     }
 
     @Override
@@ -89,10 +50,11 @@ public class MainMenuScreen extends ScreenAdapter {
         int hovered = rowAt(tmp.y);
         if (moved && hovered != -1) selected = hovered;
 
+        boolean hasBg = game.menuBackground.hasBackgrounds();
         boolean overBgButton = BG_BUTTON.contains(tmp.x, tmp.y);
-        boolean cycleBackground = Gdx.input.isKeyJustPressed(Keys.B)
-                        || (overBgButton && Gdx.input.justTouched());
-        if (cycleBackground) cycleBackground();
+        if ((Gdx.input.isKeyJustPressed(Keys.B) || (overBgButton && Gdx.input.justTouched())) && hasBg) {
+            game.menuBackground.cycle();
+        }
 
         boolean activate = Gdx.input.isKeyJustPressed(Keys.ENTER)
                         || Gdx.input.isKeyJustPressed(Keys.Z)
@@ -102,17 +64,8 @@ public class MainMenuScreen extends ScreenAdapter {
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
 
-        if (!backgrounds.isEmpty()) {
-            game.batch.setColor(Color.WHITE);
-            game.batch.draw(backgrounds.get(background), 0, 0, 800, 600);
-        }
-
-        if (title != null) {
-            game.batch.setColor(Color.WHITE);
-            float scale = Math.min(TITLE_MAX_W / title.getWidth(), TITLE_MAX_H / title.getHeight());
-            float w = title.getWidth() * scale, h = title.getHeight() * scale;
-            game.batch.draw(title, (800 - w) / 2f, TITLE_CY - h / 2f, w, h);
-        }
+        game.menuBackground.drawBackground(game.batch);
+        game.menuBackground.drawTitle(game.batch);
 
         for (int i = 0; i < items.length; i++) {
             game.fontLarge.setColor(i == selected ? new Color(0.85f, 0.7f, 0.15f, 1f) : Color.WHITE);
@@ -120,7 +73,7 @@ public class MainMenuScreen extends ScreenAdapter {
             game.fontLarge.draw(game.batch, layout, (800 - layout.width) / 2f, TOP_Y - i * SPACING);
         }
 
-        if (!backgrounds.isEmpty()) {
+        if (hasBg) {
             game.fontMedium.setColor(overBgButton ? new Color(0.85f, 0.7f, 0.15f, 1f)
                                                   : new Color(0.7f, 0.7f, 0.7f, 1f));
             layout.setText(game.fontMedium, "[ B ]  Background");
@@ -132,13 +85,6 @@ public class MainMenuScreen extends ScreenAdapter {
         game.batch.end();
 
         if (activate) select();
-    }
-
-    private void cycleBackground() {
-        if (backgrounds.isEmpty()) return;
-        background = (background + 1) % backgrounds.size();
-        Settings.get().menuBackground = background;
-        Settings.get().save();
     }
 
     private int rowAt(float worldY) {
@@ -157,21 +103,5 @@ public class MainMenuScreen extends ScreenAdapter {
             case 3: game.setScreen(new AchievementsScreen(game)); break;
             case 4: Gdx.app.exit(); break;
         }
-    }
-
-    private void disposeBackgrounds() {
-        for (Texture t : backgrounds) t.dispose();
-        backgrounds.clear();
-        if (title != null) { title.dispose(); title = null; }
-    }
-
-    @Override
-    public void hide() {
-        disposeBackgrounds();
-    }
-
-    @Override
-    public void dispose() {
-        disposeBackgrounds();
     }
 }
