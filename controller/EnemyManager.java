@@ -29,10 +29,13 @@ public class EnemyManager {
     private final Map<Enemy, Float> deadTime = new HashMap<>();
     private final EnemyRenderer renderer;
     private final Level level;
+    private final Rectangle arena;
+    private boolean bossActive = false;
 
     public EnemyManager(EnemyRenderer renderer, Level level) {
         this.renderer = renderer;
         this.level = level;
+        this.arena = level.getArena();
         spawnEnemies();
     }
 
@@ -44,6 +47,7 @@ public class EnemyManager {
     }
 
     public void update(float dt, Knight player, boolean bossActive) {
+        this.bossActive = bossActive;
         // While the arena boss fight is underway the roaming enemies stop acting entirely,
         // so they no longer chase the player up to (or into) the arena.
         if (bossActive) return;
@@ -108,7 +112,12 @@ public class EnemyManager {
     }
 
     public void render(SpriteBatch batch) {
-        for (Enemy enemy : enemies) renderer.render(batch, enemy);
+        for (Enemy enemy : enemies) {
+            // Keep the arena clear during the boss fight: don't draw any roaming enemy
+            // that happens to be standing inside the arena bounds.
+            if (bossActive && arena != null && enemy.getBoundingBox().overlaps(arena)) continue;
+            renderer.render(batch, enemy);
+        }
     }
 
     public List<Enemy> getEnemies() { return enemies; }
