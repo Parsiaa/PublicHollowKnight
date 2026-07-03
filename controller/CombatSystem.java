@@ -7,6 +7,7 @@ import java.util.Set;
 
 import HollowKnight.hollowknight.model.Enemy;
 import HollowKnight.hollowknight.model.Entity;
+import HollowKnight.hollowknight.model.FalseKnight;
 import HollowKnight.hollowknight.model.Knight;
 import HollowKnight.hollowknight.model.Level;
 import HollowKnight.hollowknight.model.enemies.CrystalGuardian;
@@ -20,6 +21,7 @@ public class CombatSystem {
     private final EnemyManager enemyManager;
     private final GameCamera camera;
     private final Level level;
+    private FalseKnight boss;   // set once the arena boss exists; null otherwise
 
     private boolean wasAttacking = false;
     private boolean pogoedThisSwing = false;
@@ -33,6 +35,9 @@ public class CombatSystem {
         this.camera = camera;
         this.level = level;
     }
+
+    /** Register the arena boss so down-slashes can pogo off it too. */
+    public void setBoss(FalseKnight boss) { this.boss = boss; }
 
     public void update() {
         applyNailHits();
@@ -63,12 +68,16 @@ public class CombatSystem {
         }
 
         if (s == Entity.State.DOWN_SLASH && !knight.onGround && !pogoedThisSwing) {
-            if (!nailHitSomething) {
+            boolean pogoTarget = nailHitSomething;
+            if (!pogoTarget && boss != null && !boss.isDead() && nail.overlaps(boss.getBounds())) {
+                pogoTarget = true;
+            }
+            if (!pogoTarget) {
                 for (Rectangle spike : level.getSpikes()) {
-                    if (nail.overlaps(spike)) { nailHitSomething = true; break; }
+                    if (nail.overlaps(spike)) { pogoTarget = true; break; }
                 }
             }
-            if (nailHitSomething) {
+            if (pogoTarget) {
                 knight.pogoBounce();
                 pogoedThisSwing = true;
                 camera.shake(0.1f, 4f);

@@ -28,6 +28,7 @@ public class AchievementsScreen extends ScreenAdapter {
         ScreenUtils.clear(0.04f, 0.04f, 0.06f, 1f);
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
+        game.menuBackground.drawBackground(game.batch);
 
         game.fontLarge.setColor(0.85f, 0.7f, 0.15f, 1f);
         game.fontLarge.draw(game.batch, "ACHIEVEMENTS", 230, 560);

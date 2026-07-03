@@ -6,6 +6,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -21,6 +22,7 @@ public class SaveSlotScreen extends ScreenAdapter {
     private final HollowKnightGame game;
     private final OrthographicCamera cam = new OrthographicCamera();
     private final ShapeRenderer shape = new ShapeRenderer();
+    private final GlyphLayout layout = new GlyphLayout();
     private final Vector3 tmp = new Vector3();
     private final GameData[] slots = new GameData[SaveManager.SLOT_COUNT];
 
@@ -82,6 +84,11 @@ public class SaveSlotScreen extends ScreenAdapter {
     private void draw() {
         ScreenUtils.clear(0.04f, 0.04f, 0.06f, 1f);
 
+        game.batch.setProjectionMatrix(cam.combined);
+        game.batch.begin();
+        game.menuBackground.drawBackground(game.batch);
+        game.batch.end();
+
         Gdx.gl.glEnable(GL20.GL_BLEND);
         shape.setProjectionMatrix(cam.combined);
         shape.begin(ShapeRenderer.ShapeType.Filled);
@@ -112,7 +119,8 @@ public class SaveSlotScreen extends ScreenAdapter {
         }
 
         game.fontMedium.setColor(0.5f, 0.5f, 0.5f, 1f);
-        game.fontMedium.draw(game.batch, "Enter/Click: play     Del: erase slot     Esc: back", 150, 70);
+        layout.setText(game.fontMedium, "Enter/Click: play     Del: erase slot     Esc: back");
+        game.fontMedium.draw(game.batch, layout, (800 - layout.width) / 2f, 70);
         game.batch.end();
     }
 

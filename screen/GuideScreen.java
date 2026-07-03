@@ -45,6 +45,7 @@ public class GuideScreen extends ScreenAdapter {
         ScreenUtils.clear(0.04f, 0.04f, 0.06f, 1f);
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
+        game.menuBackground.drawBackground(game.batch);
         game.fontMedium.setColor(Color.WHITE);
 
         float y = 560f;
