@@ -27,7 +27,7 @@ public class MenuBackground {
     };
     private static final String TITLE_PATH = "background/title.png";
 
-    // Title is fit (aspect preserved) into this band above the menu items, centred on TITLE_CY.
+
     private static final float TITLE_MAX_W = 560f, TITLE_MAX_H = 150f, TITLE_CY = 512f;
 
     private final List<Texture> backgrounds = new ArrayList<>();

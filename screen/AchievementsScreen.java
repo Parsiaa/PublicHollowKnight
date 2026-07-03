@@ -37,7 +37,7 @@ public class AchievementsScreen extends ScreenAdapter {
         for (Achievement a : Achievement.values()) {
             boolean got = achievements.isUnlocked(a);
             game.fontMedium.setColor(got ? new Color(0.85f, 0.7f, 0.15f, 1f)
-                                         : new Color(0.4f, 0.4f, 0.4f, 1f));  // greyed = locked
+                                         : new Color(0.4f, 0.4f, 0.4f, 1f));
             String title = got ? a.title : a.title + "  [LOCKED]";
             game.fontMedium.draw(game.batch, title, 120, y);
 

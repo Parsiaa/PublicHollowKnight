@@ -18,7 +18,7 @@ import HollowKnight.hollowknight.model.Settings;
 public class SettingsScreen extends ScreenAdapter {
     private static final float TOP = 470f, SPACING = 64f, ROW_H = 52f;
     private static final float TRACK_X = 420f, TRACK_W = 280f, TRACK_H = 10f;
-    private static final int ROWS = 6;       // 0 musicVol, 1 musicToggle, 2 sfxVol, 3 sfxToggle, 4 resetSfx, 5 back
+    private static final int ROWS = 6;
 
     private final HollowKnightGame game;
     private final Screen back;
@@ -66,7 +66,7 @@ public class SettingsScreen extends ScreenAdapter {
         int hov = rowAt(tmp.y);
         if (moved && hov != -1) selected = hov;
 
-        // Slider keyboard nudge
+
         if (selected == 0 || selected == 2) {
             if (Gdx.input.isKeyJustPressed(Keys.LEFT))  setVolume(selected, volume(selected) - 0.05f);
             if (Gdx.input.isKeyJustPressed(Keys.RIGHT)) setVolume(selected, volume(selected) + 0.05f);

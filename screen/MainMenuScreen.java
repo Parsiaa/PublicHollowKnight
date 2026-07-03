@@ -16,7 +16,6 @@ public class MainMenuScreen extends ScreenAdapter {
     private static final float ROW_H = 50f, TOP_Y = 420f, SPACING = 60f;
     private static final String BGM = "audio/menu.ogg";
 
-    // On-screen "change background" button (virtual 800x600 coords, y-up).
     private static final Rectangle BG_BUTTON = new Rectangle(520f, 40f, 240f, 40f);
 
     private final HollowKnightGame game;

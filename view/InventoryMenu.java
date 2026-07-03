@@ -65,7 +65,7 @@ public class InventoryMenu {
     private boolean open        = false;
     private int     hoveredSlot = -1;
 
-    // Grid origin (top-left of first slot), computed in create()
+
     private float gridOriginX, gridOriginY;
 
     public InventoryMenu(Knight knight, float screenW, float screenH) {
@@ -73,13 +73,11 @@ public class InventoryMenu {
         this.uiCamera = new OrthographicCamera();
         uiCamera.setToOrtho(false, screenW, screenH);
         this.sr     = new ShapeRenderer();
-        // Use the game-wide Trajan font (owned + disposed by this menu) instead of libGDX's default.
         this.font   = FontFactory.generate(HollowKnightGame.FONT_PATH, 18);
         this.layout = new GlyphLayout();
 
         font.setColor(Color.WHITE);
 
-        // Grid centred horizontally, sits in the middle third of the screen
         float gridW = GRID_COLS * SLOT_SIZE + (GRID_COLS - 1) * SLOT_PAD;
         float gridH = 2 * SLOT_SIZE + SLOT_PAD;
         gridOriginX = (screenW - gridW) / 2f;
@@ -140,7 +138,7 @@ public class InventoryMenu {
             boolean full     = (!equipped && knight.usedNotches >= Knight.MAX_NOTCHES);
 
             if (equipped) {
-                sr.setColor(0.85f, 0.7f, 0.15f, 1f);  // gold border
+                sr.setColor(0.85f, 0.7f, 0.15f, 1f);
             } else if (hovered && !full) {
                 sr.setColor(0.55f, 0.55f, 0.55f, 1f);
             } else {
@@ -171,7 +169,7 @@ public class InventoryMenu {
         }
         batch.setColor(Color.WHITE);
 
-        // --- Title ---
+
         layout.setText(font, "C H A R M S");
         font.setColor(0.85f, 0.7f, 0.15f, 1f);
         font.draw(batch, layout,
@@ -179,7 +177,6 @@ public class InventoryMenu {
             gridOriginY + 2 * SLOT_SIZE + SLOT_PAD + 60f);
         font.setColor(Color.WHITE);
 
-        // --- Hovered charm name + description ---
         if (hoveredSlot >= 0) {
             String name = CHARM_NAMES[hoveredSlot];
             String desc = CHARM_DESC[hoveredSlot];
@@ -197,14 +194,13 @@ public class InventoryMenu {
                 gridOriginY - 44f);
         }
 
-        // --- Notch count text ---
+
         font.setColor(Color.WHITE);
         String notchText = "Notches: " + knight.usedNotches + " / " + Knight.MAX_NOTCHES;
         layout.setText(font, notchText);
         font.draw(batch, layout,
             (uiCamera.viewportWidth - layout.width) / 2f, 60f);
 
-        // --- Close hint ---
         font.setColor(0.5f, 0.5f, 0.5f, 1f);
         layout.setText(font, "[ I ]  Close");
         font.draw(batch, layout,

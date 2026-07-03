@@ -21,7 +21,7 @@ import HollowKnight.hollowknight.view.EnemyRenderer;
 public class EnemyManager {
 
     private static final float RESPAWN_DISTANCE = 600f;
-    private static final float RESPAWN_DELAY = 4f;   // a corpse must stay dead this long before it may respawn
+    private static final float RESPAWN_DELAY = 4f;
     private static final float PLAYER_HIT_IFRAMES = 1.0f;
     private static final float HURT_DURATION = 0.18f;
 
@@ -48,8 +48,6 @@ public class EnemyManager {
 
     public void update(float dt, Knight player, boolean bossActive) {
         this.bossActive = bossActive;
-        // While the arena boss fight is underway the roaming enemies stop acting entirely,
-        // so they no longer chase the player up to (or into) the arena.
         if (bossActive) return;
 
         Rectangle playerBox = player.getBoundingBox();
@@ -58,7 +56,6 @@ public class EnemyManager {
             if (enemy.isDead()) {
                 float t = deadTime.getOrDefault(enemy, 0f) + dt;
                 deadTime.put(enemy, t);
-                // Only bring an enemy back once it has stayed dead a while AND the player has moved away.
                 if (t >= RESPAWN_DELAY && distanceToSpawn(enemy, playerBox) > RESPAWN_DISTANCE) {
                     enemy.respawn();
                     deadTime.remove(enemy);
@@ -113,8 +110,6 @@ public class EnemyManager {
 
     public void render(SpriteBatch batch) {
         for (Enemy enemy : enemies) {
-            // Keep the arena clear during the boss fight: don't draw any roaming enemy
-            // that happens to be standing inside the arena bounds.
             if (bossActive && arena != null && enemy.getBoundingBox().overlaps(arena)) continue;
             renderer.render(batch, enemy);
         }

@@ -12,8 +12,7 @@ import HollowKnight.hollowknight.utils.FalseKnightAssetManager;
 public class FalseKnightRenderer {
 
     private static final float SPRITE_SCALE = 2.4f;
-    // The sprite frames have empty space below the boss's feet, which makes it float above the
-    // ground. Nudge the sprite down by this fraction of its drawn height to seat it. Tweak if needed.
+
     private static final float FOOT_OFFSET = 0.05f;
 
     private final FalseKnightAssetManager assets;

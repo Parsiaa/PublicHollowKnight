@@ -21,7 +21,7 @@ public class CombatSystem {
     private final EnemyManager enemyManager;
     private final GameCamera camera;
     private final Level level;
-    private FalseKnight boss;   // set once the arena boss exists; null otherwise
+    private FalseKnight boss;
 
     private boolean wasAttacking = false;
     private boolean pogoedThisSwing = false;
