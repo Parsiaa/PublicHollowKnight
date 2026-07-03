@@ -47,7 +47,7 @@ import HollowKnight.hollowknight.view.ZoteRenderer;
 
 public class GameScreen extends ScreenAdapter {
     private static final float VIEW_W = 800f, VIEW_H = 600f;
-    private static final String BGM = "audio/greenpath.ogg";
+    private static final String BGM = "audio/greenpath.wav";
 
     private static final float BOSS_W = 260f;
     private static final float BOSS_H = 300f;
