@@ -11,9 +11,10 @@ public class HUD {
     private final OrthographicCamera uiCamera;
 
     private static final float UI_SCALE = 0.35f;
-    private static final float ORB_X = 34f, ORB_Y = 466f, ORB_H = 120f;
-    private static final float VESSEL_L = 0.077f, VESSEL_R = 0.923f, VESSEL_T = 0.056f, VESSEL_B = 0.936f;
+    private static final float VESSEL_X = 19f, VESSEL_Y = 453f, VESSEL_H = 143f;
+    private static final float CIRCLE_L = 0.066f, CIRCLE_R = 0.533f, CIRCLE_T = 0.177f, CIRCLE_B = 0.909f;
     private static final float LIQUID_L = 0.062f, LIQUID_R = 0.527f, LIQUID_T = 0.244f, LIQUID_B = 0.963f;
+    private static final float LIQUID_INSET = 0.06f;
     private static final float MASK_START_X = 168f;
     private static final float MASK_ROW_Y = 515f;
     private static final float MASK_PACK = 0.78f;
@@ -85,21 +86,23 @@ public class HUD {
     }
 
     private void drawSoulVessel(SpriteBatch batch) {
-        float w = ORB_H * ((float) soulVesselFrame.getRegionWidth() / soulVesselFrame.getRegionHeight());
-        float h = ORB_H;
-        float x = ORB_X, y = ORB_Y;
+        float vw = VESSEL_H * ((float) soulVesselFrame.getRegionWidth() / soulVesselFrame.getRegionHeight());
+        float vh = VESSEL_H;
+        float vx = VESSEL_X, vy = VESSEL_Y;
 
         float fill = visualSoul / knight.maxSoul;
         if (fill < 0f) fill = 0f;
         if (fill > 1f) fill = 1f;
 
-        batch.draw(soulVesselFrame, x, y, w, h);
+        batch.draw(soulVesselFrame, vx, vy, vw, vh);
 
         if (fill > 0f) {
-            float circleX = x + VESSEL_L * w;
-            float circleY = y + (1f - VESSEL_B) * h;
-            float circleW = (VESSEL_R - VESSEL_L) * w;
-            float circleH = (VESSEL_B - VESSEL_T) * h;
+            float cW = (CIRCLE_R - CIRCLE_L) * vw;
+            float cH = (CIRCLE_B - CIRCLE_T) * vh;
+            float cX = vx + CIRCLE_L * vw;
+            float cY = vy + (1f - CIRCLE_B) * vh;
+            float insetX = cW * LIQUID_INSET, insetY = cH * LIQUID_INSET;
+            cX += insetX; cY += insetY; cW -= 2f * insetX; cH -= 2f * insetY;
 
             int fw = soulLiquid.getRegionWidth();
             int fh = soulLiquid.getRegionHeight();
@@ -111,7 +114,7 @@ public class HUD {
             int srcH = Math.max(1, Math.round(oh * fill));
             int srcY = oyTop + (oh - srcH);
             batch.draw(soulLiquid.getTexture(),
-                    circleX, circleY, circleW, circleH * fill,
+                    cX, cY, cW, cH * fill,
                     ox, srcY, ow, srcH, false, false);
         }
     }
