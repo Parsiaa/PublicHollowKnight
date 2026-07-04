@@ -12,9 +12,11 @@ public class HUD {
 
     private static final float UI_SCALE = 0.35f;
     private static final float VESSEL_X = 19f, VESSEL_Y = 453f, VESSEL_H = 143f;
+
     private static final float CIRCLE_L = 0.047f, CIRCLE_R = 0.576f, CIRCLE_T = 0.122f, CIRCLE_B = 0.951f;
-    private static final float LIQUID_L = 0.062f, LIQUID_R = 0.527f, LIQUID_T = 0.244f, LIQUID_B = 0.963f;
+    private static final float LIQUID_L = 0.09f, LIQUID_R = 0.55f, LIQUID_T = 0.17f, LIQUID_B = 0.93f;
     private static final float LIQUID_INSET = 0.05f;
+    
     private static final float MASK_START_X = 168f;
     private static final float MASK_ROW_Y = 492f;
     private static final float MASK_PACK = 0.78f;
