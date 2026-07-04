@@ -56,7 +56,7 @@ public class GameScreen extends ScreenAdapter {
     private static final float VICTORY_DELAY = 2.0f;
     private static final float MAX_FRAME_TIME = 1f / 30f;
 
-    private static final String SFX_SLASH = "audio/sfx/nail_swing.ogg";
+    private static final String SFX_SLASH = "audio/sfx/slash.wav";
     private static final String SFX_DASH = "audio/sfx/dash.wav";
     private static final String SFX_SPIRIT = "audio/sfx/vengeful_spirit.ogg";
     private static final String SFX_WRAITHS = "audio/sfx/howling_wraiths.ogg";
