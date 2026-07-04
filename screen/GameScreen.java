@@ -56,18 +56,21 @@ public class GameScreen extends ScreenAdapter {
     private static final float VICTORY_DELAY = 2.0f;
     private static final float MAX_FRAME_TIME = 1f / 30f;
 
+    // Paths use the exact filenames uploaded under sfx/sfx/ - drop those .wav files into
+    // assets/audio/sfx/ (keeping their names) and they will play.
     private static final String SFX_SLASH = "audio/sfx/slash.wav";
-    private static final String SFX_DASH = "audio/sfx/dash.wav";
-    private static final String SFX_SPIRIT = "audio/sfx/vengeful_spirit.ogg";
-    private static final String SFX_WRAITHS = "audio/sfx/howling_wraiths.ogg";
-    private static final String SFX_JUMP = "audio/sfx/jump.ogg";
-    private static final String SFX_LAND = "audio/sfx/land.ogg";
-    private static final String SFX_HURT = "audio/sfx/player_hurt.ogg";
-    private static final String SFX_DEATH = "audio/sfx/player_death.ogg";
-    private static final String SFX_FOCUS = "audio/sfx/focus_heal.ogg";
-    private static final String SFX_SOUL = "audio/sfx/soul_gain.ogg";
-    private static final String SFX_ENEMY_DEATH = "audio/sfx/enemy_death.ogg";
-    private static final String SFX_WALL_BREAK = "audio/sfx/wall_break.ogg";
+    private static final String SFX_DASH = "audio/sfx/hero_dash.wav";
+    private static final String SFX_SPIRIT = "audio/sfx/hero_fireball.wav";
+    private static final String SFX_WRAITHS = "audio/sfx/hero_scream_spell.wav";
+    private static final String SFX_JUMP = "audio/sfx/hero_jump.wav";
+    private static final String SFX_WINGS = "audio/sfx/hero_wings.wav";
+    private static final String SFX_LAND = "audio/sfx/hero_land_soft.wav";
+    private static final String SFX_HURT = "audio/sfx/hero_damage.wav";
+    private static final String SFX_DEATH = "audio/sfx/hero_death_extra_details.wav";
+    private static final String SFX_FOCUS = "audio/sfx/focus_health_heal.wav";
+    private static final String SFX_SOUL = "audio/sfx/soulGain.wav";
+    private static final String SFX_ENEMY_DEATH = "audio/sfx/enemy_damage.wav";
+    private static final String SFX_WALL_BREAK = "audio/sfx/hero_nail_art_great_slash.wav";
 
     private final HollowKnightGame game;
     private final SpriteBatch batch;
@@ -300,7 +303,8 @@ public class GameScreen extends ScreenAdapter {
         Entity.State s = player.getCurrentState();
         if (s != sfxPrevState) {
             switch (s) {
-                case JUMPING: case DOUBLE_JUMPING: case WALL_JUMPING: sfx(SFX_JUMP); break;
+                case JUMPING: case WALL_JUMPING: sfx(SFX_JUMP); break;
+                case DOUBLE_JUMPING: sfx(SFX_WINGS); break;
                 case LANDING: sfx(SFX_LAND); break;
                 case FOCUS_GET: sfx(SFX_FOCUS); break;
                 case DEAD: sfx(SFX_DEATH); break;

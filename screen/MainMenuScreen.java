@@ -15,6 +15,8 @@ import HollowKnight.hollowknight.HollowKnightGame;
 public class MainMenuScreen extends ScreenAdapter {
     private static final float ROW_H = 50f, TOP_Y = 420f, SPACING = 60f;
     private static final String BGM = "audio/menu.ogg";
+    private static final String SFX_MOVE = "audio/sfx/ui_change_selection.wav";
+    private static final String SFX_CONFIRM = "audio/sfx/ui_button_confirm.wav";
 
     private static final Rectangle BG_BUTTON = new Rectangle(520f, 40f, 240f, 40f);
 
@@ -38,6 +40,7 @@ public class MainMenuScreen extends ScreenAdapter {
 
     @Override
     public void render(float dt) {
+        int prevSelected = selected;
         if (Gdx.input.isKeyJustPressed(Keys.UP)) selected = (selected + items.length - 1) % items.length;
         if (Gdx.input.isKeyJustPressed(Keys.DOWN)) selected = (selected + 1) % items.length;
 
@@ -48,6 +51,8 @@ public class MainMenuScreen extends ScreenAdapter {
         camera.unproject(tmp);
         int hovered = rowAt(tmp.y);
         if (moved && hovered != -1) selected = hovered;
+
+        if (selected != prevSelected) game.audio.playSound(SFX_MOVE);
 
         boolean hasBg = game.menuBackground.hasBackgrounds();
         boolean overBgButton = BG_BUTTON.contains(tmp.x, tmp.y);
@@ -83,7 +88,7 @@ public class MainMenuScreen extends ScreenAdapter {
 
         game.batch.end();
 
-        if (activate) select();
+        if (activate) { game.audio.playSound(SFX_CONFIRM); select(); }
     }
 
     private int rowAt(float worldY) {

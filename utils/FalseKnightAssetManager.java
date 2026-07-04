@@ -15,6 +15,10 @@ public class FalseKnightAssetManager {
     private static final int FRAME_W = 1095;
     private static final int FRAME_H = 636;
 
+    // The DAZED strip (head-out pose) opens on a frame where the head is still tucked back in,
+    // which reads as the head popping out, back in, then out again. Skip that lead frame.
+    private static final int DAZED_SKIP_FRAMES = 1;
+
     private final Array<Texture> textures = new Array<>();
     private final Map<FalseKnightAnimationType, Animation<TextureRegion>> anims =
             new EnumMap<>(FalseKnightAnimationType.class);
@@ -30,7 +34,7 @@ public class FalseKnightAssetManager {
         anims.put(FalseKnightAnimationType.STUN_LAND,
                 or(tryStrip("Body.png", 0.09f, Animation.PlayMode.NORMAL), idle));
         anims.put(FalseKnightAnimationType.STUN_DAZED,
-                or(tryStrip("DeathLand.png", 0.06f, Animation.PlayMode.NORMAL), idle));
+                or(tryStripFrom("DeathLand.png", 0.06f, Animation.PlayMode.NORMAL, DAZED_SKIP_FRAMES), idle));
         anims.put(FalseKnightAnimationType.STUN_HIT,
                 or(tryStrip("DeathHit.png", 0.06f, Animation.PlayMode.NORMAL),
                         anims.get(FalseKnightAnimationType.STUN_DAZED)));
@@ -66,6 +70,17 @@ public class FalseKnightAssetManager {
         }
     }
 
+    private Animation<TextureRegion> tryStripFrom(String file, float frameDuration,
+                                                  Animation.PlayMode mode, int startFrame) {
+        try {
+            return stripFrom(file, frameDuration, mode, startFrame);
+        } catch (Exception e) {
+            Gdx.app.error("FalseKnightAssets", "Missing/!loadable sprite sheet: " + DIR + file
+                    + " - falling back. (" + e.getMessage() + ")");
+            return null;
+        }
+    }
+
     private Animation<TextureRegion> tryCombined(float frameDuration, Animation.PlayMode mode, String... files) {
         try {
             return combined(frameDuration, mode, files);
@@ -89,6 +104,18 @@ public class FalseKnightAssetManager {
 
     private Animation<TextureRegion> strip(String file, float frameDuration, Animation.PlayMode mode) {
         Animation<TextureRegion> a = new Animation<>(frameDuration, frames(file));
+        a.setPlayMode(mode);
+        return a;
+    }
+
+    /** Like {@link #strip}, but drops the first {@code startFrame} frames of the sheet. */
+    private Animation<TextureRegion> stripFrom(String file, float frameDuration,
+                                               Animation.PlayMode mode, int startFrame) {
+        Array<TextureRegion> all = frames(file);
+        Array<TextureRegion> out = new Array<>();
+        int start = Math.max(0, Math.min(startFrame, all.size - 1));   // always keep at least one frame
+        for (int i = start; i < all.size; i++) out.add(all.get(i));
+        Animation<TextureRegion> a = new Animation<>(frameDuration, out);
         a.setPlayMode(mode);
         return a;
     }

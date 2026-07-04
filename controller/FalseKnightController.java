@@ -444,6 +444,6 @@ public class FalseKnightController {
     }
 
     private void playHit() {
-        if (audio != null) audio.playSound("audio/sfx/boss_hit.ogg");
+        if (audio != null) audio.playSound("audio/sfx/enemy_damage.wav");
     }
 }
