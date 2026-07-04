@@ -15,6 +15,10 @@ public class HUD {
     private static final float HUD_LEFT = 30f;
     private static final float MASK_ROW_Y = 515f;
     private static final float MASK_PACK = 0.78f;
+    // Masks sweep up to the right along a gentle arc (like the Hollow Knight mask necklace)
+    // instead of sitting in a flat row. Tune these two to taste.
+    private static final float MASK_ARC_RISE = 52f;   // how much the row climbs across its length
+    private static final float MASK_ARC_ROT  = 10f;   // max tilt (degrees) of the masks along the arc
     private static final float MASK_OVER_ORB = 0.60f;
     private static final float ORB_CX_FRAC = 0.33f;
     private static final float ORB_CY_FRAC = 0.48f;
@@ -126,9 +130,13 @@ public class HUD {
         float rowStartX = HUD_LEFT + vesselW * MASK_OVER_ORB;
         float spacing = maskW * MASK_PACK;
 
+        int n = Math.max(1, knight.maxMasks);
         for (int i = 0; i < knight.maxMasks; i++) {
+            float frac = (n == 1) ? 0f : (float) i / (n - 1);
+            // Rise along a quarter-sine arc (steep near the vessel, flattening to the right).
             float maskX = rowStartX + (i * spacing);
-            float maskY = MASK_ROW_Y;
+            float maskY = MASK_ROW_Y + MASK_ARC_RISE * (float) Math.sin(frac * (Math.PI / 2.0));
+            float rot   = -MASK_ARC_ROT * (float) Math.cos(frac * (Math.PI / 2.0));
 
             TextureRegion frameToDraw = emptyHealthTexture;
 
@@ -138,9 +146,9 @@ public class HUD {
                 frameToDraw = filledHealthShine.getKeyFrame(stateTime, true);
             }
 
-            batch.draw(frameToDraw, maskX, maskY,
-                    frameToDraw.getRegionWidth() * UI_SCALE,
-                    frameToDraw.getRegionHeight() * UI_SCALE);
+            float w = frameToDraw.getRegionWidth() * UI_SCALE;
+            float h = frameToDraw.getRegionHeight() * UI_SCALE;
+            batch.draw(frameToDraw, maskX, maskY, w / 2f, h / 2f, w, h, 1f, 1f, rot);
         }
     }
 
