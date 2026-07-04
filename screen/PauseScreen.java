@@ -85,9 +85,6 @@ public class PauseScreen extends ScreenAdapter {
         int hov = rowAt(tmp.y);
         if (moved && hov != -1) selected = hov;
 
-        // A mouse click acts on the hovered row; Enter acts on the keyboard-selected row.
-        // (Previously Enter also jumped to whatever the mouse happened to hover, so pressing
-        //  Enter on "Continue" while the cursor rested over "Cheat Codes" toggled the cheats.)
         if (hov != -1 && Gdx.input.justTouched()) { selected = hov; activate(selected); }
         else if (Gdx.input.isKeyJustPressed(Keys.ENTER)) activate(selected);
     }

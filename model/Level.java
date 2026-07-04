@@ -128,8 +128,6 @@ public class Level {
         }
     }
 
-    /** Clears the map tiles overlapping the given world-space rectangle across every tile layer,
-     *  so a broken breakable wall visually disappears (the tiles are baked into the map). */
     public void hideTilesIn(Rectangle world) {
         int tw = map.getProperties().get("tilewidth", Integer.class);
         int th = map.getProperties().get("tileheight", Integer.class);

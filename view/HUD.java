@@ -11,9 +11,9 @@ public class HUD {
     private final OrthographicCamera uiCamera;
 
     private static final float UI_SCALE = 0.35f;
-    // Soul orb placement/size (on-screen, in the 800x600 UI space).
     private static final float ORB_X = 34f, ORB_Y = 466f, ORB_H = 120f;
-    // Mask row: starts just right of the orb and runs flat.
+    private static final float VESSEL_L = 0.077f, VESSEL_R = 0.923f, VESSEL_T = 0.056f, VESSEL_B = 0.936f;
+    private static final float LIQUID_L = 0.062f, LIQUID_R = 0.527f, LIQUID_T = 0.244f, LIQUID_B = 0.963f;
     private static final float MASK_START_X = 168f;
     private static final float MASK_ROW_Y = 515f;
     private static final float MASK_PACK = 0.78f;
@@ -93,20 +93,26 @@ public class HUD {
         if (fill < 0f) fill = 0f;
         if (fill > 1f) fill = 1f;
 
-        // Empty vessel underneath.
         batch.draw(soulVesselFrame, x, y, w, h);
 
-        // Orb-shaped liquid on top, revealed from the bottom up to the fill level. Because the
-        // liquid texture is the orb (transparent outside it), cropping it vertically gives a fill
-        // that follows the orb's shape instead of a rectangle spilling past the edges.
         if (fill > 0f) {
-            int regionH = soulLiquid.getRegionHeight();
-            int srcHeight = Math.max(1, Math.round(regionH * fill));
-            int srcY = soulLiquid.getRegionY() + (regionH - srcHeight);
+            float circleX = x + VESSEL_L * w;
+            float circleY = y + (1f - VESSEL_B) * h;
+            float circleW = (VESSEL_R - VESSEL_L) * w;
+            float circleH = (VESSEL_B - VESSEL_T) * h;
+
+            int fw = soulLiquid.getRegionWidth();
+            int fh = soulLiquid.getRegionHeight();
+            int ox = soulLiquid.getRegionX() + Math.round(LIQUID_L * fw);
+            int oyTop = soulLiquid.getRegionY() + Math.round(LIQUID_T * fh);
+            int ow = Math.round((LIQUID_R - LIQUID_L) * fw);
+            int oh = Math.round((LIQUID_B - LIQUID_T) * fh);
+
+            int srcH = Math.max(1, Math.round(oh * fill));
+            int srcY = oyTop + (oh - srcH);
             batch.draw(soulLiquid.getTexture(),
-                    x, y, w, h * fill,
-                    soulLiquid.getRegionX(), srcY, soulLiquid.getRegionWidth(), srcHeight,
-                    false, false);
+                    circleX, circleY, circleW, circleH * fill,
+                    ox, srcY, ow, srcH, false, false);
         }
     }
 
