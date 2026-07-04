@@ -3,7 +3,6 @@ package HollowKnight.hollowknight.model;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 
-/** Singleton settings, persisted via libGDX Preferences. */
 public class Settings {
     private static Settings instance;
     public static Settings get() {

@@ -14,21 +14,7 @@ import HollowKnight.hollowknight.HollowKnightGame;
 import HollowKnight.hollowknight.model.Knight;
 import HollowKnight.hollowknight.utils.FontFactory;
 
-/**
- * Full-screen inventory overlay shown when the player presses I.
- * Pauses game logic while open (checked in HollowKnightGame).
- *
- * Layout (800×600 virtual screen):
- *   Dark translucent background over the game world
- *   Title "CHARMS" centred at top
- *   8 charm slots in a 4×2 grid, each showing the charm icon
- *   Equipped charms have a bright border; un-equippable ones (notch limit) are dimmed
- *   Bottom bar: notch counter  |  charm name on hover  |  [I] to close
- *
- * Charm index mapping (matches Knight.equipCharm / unequipCharm):
- *   1 Soul Catcher  2 Dashmaster  3 Unbreakable Strength  4 Quick Slash
- *   5 Quick Focus   6 Heavy Blow  7 Sharp Shadow          8 Void Heart
- */
+
 public class InventoryMenu {
 
     private static final int   CHARM_COUNT   = 8;

@@ -36,7 +36,6 @@ public class CombatSystem {
         this.level = level;
     }
 
-    /** Register the arena boss so down-slashes can pogo off it too. */
     public void setBoss(FalseKnight boss) { this.boss = boss; }
 
     public void update() {

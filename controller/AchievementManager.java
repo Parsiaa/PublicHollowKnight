@@ -10,7 +10,6 @@ import java.util.Set;
 
 import HollowKnight.hollowknight.model.Achievement;
 
-/** Subject in the Observer pattern. Persists unlocks via Preferences. */
 public class AchievementManager {
     private static final String PREFS = "hollowknight-achievements";
 

@@ -9,7 +9,6 @@ import java.util.Map;
 
 import HollowKnight.hollowknight.model.Settings;
 
-/** Null-safe: missing audio files are simply ignored, so the menus work even before you add files. */
 public class AudioManager {
     private Music currentBgm;
     private String currentPath;

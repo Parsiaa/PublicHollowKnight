@@ -15,8 +15,6 @@ public class FalseKnightAssetManager {
     private static final int FRAME_W = 1095;
     private static final int FRAME_H = 636;
 
-    // The DAZED strip (head-out pose) opens on a frame where the head is still tucked back in,
-    // which reads as the head popping out, back in, then out again. Skip that lead frame.
     private static final int DAZED_SKIP_FRAMES = 1;
 
     private final Array<Texture> textures = new Array<>();
@@ -108,12 +106,11 @@ public class FalseKnightAssetManager {
         return a;
     }
 
-    /** Like {@link #strip}, but drops the first {@code startFrame} frames of the sheet. */
     private Animation<TextureRegion> stripFrom(String file, float frameDuration,
                                                Animation.PlayMode mode, int startFrame) {
         Array<TextureRegion> all = frames(file);
         Array<TextureRegion> out = new Array<>();
-        int start = Math.max(0, Math.min(startFrame, all.size - 1));   // always keep at least one frame
+        int start = Math.max(0, Math.min(startFrame, all.size - 1));
         for (int i = start; i < all.size; i++) out.add(all.get(i));
         Animation<TextureRegion> a = new Animation<>(frameDuration, out);
         a.setPlayMode(mode);

@@ -56,8 +56,6 @@ public class GameScreen extends ScreenAdapter {
     private static final float VICTORY_DELAY = 2.0f;
     private static final float MAX_FRAME_TIME = 1f / 30f;
 
-    // Paths use the exact filenames uploaded under sfx/sfx/ - drop those .wav files into
-    // assets/audio/sfx/ (keeping their names) and they will play.
     private static final String SFX_SLASH = "audio/sfx/slash.wav";
     private static final String SFX_DASH = "audio/sfx/hero_dash.wav";
     private static final String SFX_SPIRIT = "audio/sfx/hero_fireball.wav";
