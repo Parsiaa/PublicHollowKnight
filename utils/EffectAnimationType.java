@@ -8,7 +8,7 @@ public enum EffectAnimationType {
     NAIL_UP_SLASH   ("animation/Effects/UpSlashEffect.png",   6, 1, 6,  false),
     NAIL_DOWN_SLASH ("animation/Effects/DownSlashEffect.png", 6, 1, 6,  false),
     DASH_EFFECT     ("animation/Effects/Dash Effect.png",     8, 1, 8,  false),
-    VENGEFUL_SPIRIT ("animation/Effects/BlastSoul.png",        8, 1, 8,  false),
+    VENGEFUL_SPIRIT ("animation/Effects/SoulBall.png",         4, 1, 4,  false),
     HOWLING_WRAITHS ("animation/Effects/ShadowScream.png",    14, 1, 14, false),
     HIT_SHOCKWAVE   ("animation/Effects/Shockwave.png",        8, 1, 8,  false);
 

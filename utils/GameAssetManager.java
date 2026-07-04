@@ -53,7 +53,6 @@ public class GameAssetManager {
         healthRefill = handleUiRegion("animation/HUD/HealthRefill.png", 5, 1, 5);
         healthRefill.setPlayMode(Animation.PlayMode.NORMAL);
         
-        // Clean soul-orb art: Empty is the vessel, Full is the orb-shaped liquid we crop for the fill.
         soulVesselFrame = handleUiRegion("animation/HUD/SoulOrb_Empty.png", 1, 1, 1).getKeyFrame(0);
         soulLiquid = handleUiRegion("animation/HUD/SoulOrb_Full.png", 1, 1, 1).getKeyFrame(0);
     }

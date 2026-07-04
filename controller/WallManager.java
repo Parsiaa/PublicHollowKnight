@@ -27,7 +27,6 @@ public class WallManager {
             if (attacking && !wasAttacking && nailHitbox != null
                     && nailHitbox.overlaps(wall.getBounds())) {
                 wall.hit();
-                // Once it breaks, clear its map tiles so the wall visually disappears.
                 if (wall.isBroken()) level.hideTilesIn(wall.getBounds());
             }
         }
