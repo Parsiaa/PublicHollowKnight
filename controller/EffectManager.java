@@ -63,12 +63,11 @@ public class EffectManager {
         Rectangle b = knight.getBoundingBox();
         float w = b.height * 1.7f;
         float h = b.height * 1.25f;
-        // Centre it on the knight and trail it behind the dash direction so it overlaps the body
-        // (previously it sat entirely to the side and was too small to read).
+
         float y = b.y + b.height / 2f - h / 2f;
         float x = knight.isFacingRight() ? b.x + b.width - w : b.x;
         VisualEffect fx = new VisualEffect(EffectAnimationType.DASH_EFFECT, x, y, w, h, DASH_DURATION);
-        fx.flipX = knight.isFacingRight();
+        fx.flipX = !knight.isFacingRight();
         effects.add(fx);
     }
 
@@ -116,9 +115,6 @@ public class EffectManager {
             }
 
             if (fx.type == EffectAnimationType.VENGEFUL_SPIRIT && level != null) {
-                // Test a small central core rather than the full (large) visual bounds, so the
-                // spirit isn't deleted the instant its art grazes the floor it flies over - it
-                // only ends when that core actually meets a wall.
                 float cw = fx.bounds.width * 0.5f, ch = fx.bounds.height * 0.35f;
                 Rectangle core = new Rectangle(
                         fx.bounds.x + (fx.bounds.width - cw) / 2f,
