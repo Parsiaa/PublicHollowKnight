@@ -53,8 +53,9 @@ public class GameAssetManager {
         healthRefill = handleUiRegion("animation/HUD/HealthRefill.png", 5, 1, 5);
         healthRefill.setPlayMode(Animation.PlayMode.NORMAL);
         
-        soulVesselFrame = handleUiRegion("animation/HUD/HUD Cln_161.png", 1, 1, 1).getKeyFrame(0);
-        soulLiquid = handleUiRegion("animation/HUD/HUD Cln_249.png", 1, 1, 1).getKeyFrame(0);
+        // Clean soul-orb art: Empty is the vessel, Full is the orb-shaped liquid we crop for the fill.
+        soulVesselFrame = handleUiRegion("animation/HUD/SoulOrb_Empty.png", 1, 1, 1).getKeyFrame(0);
+        soulLiquid = handleUiRegion("animation/HUD/SoulOrb_Full.png", 1, 1, 1).getKeyFrame(0);
     }
 
     private Animation<TextureRegion> handleUiRegion(String path, int cols, int rows, int frameCount) {

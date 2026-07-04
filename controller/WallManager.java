@@ -5,15 +5,18 @@ import java.util.List;
 
 import HollowKnight.hollowknight.model.BreakableWall;
 import HollowKnight.hollowknight.model.Knight;
+import HollowKnight.hollowknight.model.Level;
 
 public class WallManager {
     private final List<BreakableWall> walls;
     private final Knight knight;
+    private final Level level;
     private boolean wasAttacking = false;
 
-    public WallManager(List<BreakableWall> walls, Knight knight) {
+    public WallManager(List<BreakableWall> walls, Knight knight, Level level) {
         this.walls = walls;
         this.knight = knight;
+        this.level = level;
     }
 
     public void update(float dt, Rectangle nailHitbox, boolean attacking) {
@@ -24,6 +27,8 @@ public class WallManager {
             if (attacking && !wasAttacking && nailHitbox != null
                     && nailHitbox.overlaps(wall.getBounds())) {
                 wall.hit();
+                // Once it breaks, clear its map tiles so the wall visually disappears.
+                if (wall.isBroken()) level.hideTilesIn(wall.getBounds());
             }
         }
         wasAttacking = attacking;

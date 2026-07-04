@@ -66,7 +66,9 @@ public class EffectManager {
         // Centre it on the knight and trail it behind the dash direction so it overlaps the body
         // (previously it sat entirely to the side and was too small to read).
         float y = b.y + b.height / 2f - h / 2f;
-        float x = knight.isFacingRight() ? b.x + b.width - w : b.x;
+        // Centre on the knight, trailing only slightly behind the dash direction, so it hugs the body.
+        float cx = b.x + b.width / 2f - w / 2f;
+        float x = knight.isFacingRight() ? cx - w * 0.1f : cx + w * 0.1f;
         VisualEffect fx = new VisualEffect(EffectAnimationType.DASH_EFFECT, x, y, w, h, DASH_DURATION);
         fx.flipX = knight.isFacingRight();
         effects.add(fx);
@@ -76,7 +78,9 @@ public class EffectManager {
         Rectangle b = knight.getBoundingBox();
         float h = b.height * 1.1f;
         float w = h * 1.7f;
-        float x = knight.isFacingRight() ? b.x + b.width : b.x - w;
+        // Start overlapping the knight (biased forward) instead of spawning a full width ahead.
+        float cx = b.x + b.width / 2f - w / 2f;
+        float x = knight.isFacingRight() ? cx + w * 0.25f : cx - w * 0.25f;
         float y = b.y + b.height / 2f - h / 2f;
         VisualEffect fx = new VisualEffect(EffectAnimationType.VENGEFUL_SPIRIT, x, y, w, h, SPIRIT_DURATION);
         fx.velocity.x = knight.isFacingRight() ? SPIRIT_SPEED : -SPIRIT_SPEED;

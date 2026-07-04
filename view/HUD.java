@@ -11,14 +11,12 @@ public class HUD {
     private final OrthographicCamera uiCamera;
 
     private static final float UI_SCALE = 0.35f;
-    private static final float VESSEL_SCALE = 0.55f;
-    private static final float HUD_LEFT = 30f;
+    // Soul orb placement/size (on-screen, in the 800x600 UI space).
+    private static final float ORB_X = 34f, ORB_Y = 466f, ORB_H = 120f;
+    // Mask row: starts just right of the orb and runs flat.
+    private static final float MASK_START_X = 168f;
     private static final float MASK_ROW_Y = 515f;
     private static final float MASK_PACK = 0.78f;
-    private static final float MASK_OVER_ORB = 0.60f;
-    private static final float ORB_CX_FRAC = 0.33f;
-    private static final float ORB_CY_FRAC = 0.48f;
-    private static final float ORB_DIAM_FRAC = 0.34f;
 
     private float visualSoul;
     private int lastMaskCount;
@@ -87,43 +85,34 @@ public class HUD {
     }
 
     private void drawSoulVessel(SpriteBatch batch) {
-        float vesselW = soulVesselFrame.getRegionWidth() * VESSEL_SCALE;
-        float vesselH = soulVesselFrame.getRegionHeight() * VESSEL_SCALE;
-        float vesselX = HUD_LEFT;
-        float vesselY = MASK_ROW_Y - vesselH * 0.62f;
+        float w = ORB_H * ((float) soulVesselFrame.getRegionWidth() / soulVesselFrame.getRegionHeight());
+        float h = ORB_H;
+        float x = ORB_X, y = ORB_Y;
 
         float fill = visualSoul / knight.maxSoul;
         if (fill < 0f) fill = 0f;
         if (fill > 1f) fill = 1f;
 
-        if (fill > 0f) {
-            float orbDiameter = vesselW * ORB_DIAM_FRAC;
-            float orbCenterX = vesselX + vesselW * ORB_CX_FRAC;
-            float orbBottomY = vesselY + vesselH * ORB_CY_FRAC - orbDiameter * 0.5f;
+        // Empty vessel underneath.
+        batch.draw(soulVesselFrame, x, y, w, h);
 
+        // Orb-shaped liquid on top, revealed from the bottom up to the fill level. Because the
+        // liquid texture is the orb (transparent outside it), cropping it vertically gives a fill
+        // that follows the orb's shape instead of a rectangle spilling past the edges.
+        if (fill > 0f) {
             int regionH = soulLiquid.getRegionHeight();
             int srcHeight = Math.max(1, Math.round(regionH * fill));
-            int srcX = soulLiquid.getRegionX();
-            int srcWidth = soulLiquid.getRegionWidth();
             int srcY = soulLiquid.getRegionY() + (regionH - srcHeight);
-
-            float drawWidth = orbDiameter;
-            float drawHeight = orbDiameter * fill;
-
             batch.draw(soulLiquid.getTexture(),
-                    orbCenterX - drawWidth / 2f, orbBottomY,
-                    drawWidth, drawHeight,
-                    srcX, srcY, srcWidth, srcHeight,
+                    x, y, w, h * fill,
+                    soulLiquid.getRegionX(), srcY, soulLiquid.getRegionWidth(), srcHeight,
                     false, false);
         }
-
-        batch.draw(soulVesselFrame, vesselX, vesselY, vesselW, vesselH);
     }
 
     private void drawMasks(SpriteBatch batch, float stateTime) {
         float maskW = emptyHealthTexture.getRegionWidth() * UI_SCALE;
-        float vesselW = soulVesselFrame.getRegionWidth() * VESSEL_SCALE;
-        float rowStartX = HUD_LEFT + vesselW * MASK_OVER_ORB;
+        float rowStartX = MASK_START_X;
         float spacing = maskW * MASK_PACK;
 
         for (int i = 0; i < knight.maxMasks; i++) {
