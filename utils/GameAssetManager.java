@@ -53,7 +53,7 @@ public class GameAssetManager {
         healthRefill = handleUiRegion("animation/HUD/HealthRefill.png", 5, 1, 5);
         healthRefill.setPlayMode(Animation.PlayMode.NORMAL);
         
-        soulVesselFrame = handleUiRegion("animation/HUD/SoulOrb_Empty.png", 1, 1, 1).getKeyFrame(0);
+        soulVesselFrame = handleUiRegion("animation/HUD/HUD Cln_167.png", 1, 1, 1).getKeyFrame(0);
         soulLiquid = handleUiRegion("animation/HUD/SoulOrb_Full.png", 1, 1, 1).getKeyFrame(0);
     }
 

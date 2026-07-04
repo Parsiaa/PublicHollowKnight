@@ -24,7 +24,7 @@ public class EffectManager {
     private static final float SLASH_DURATION = 0.27f;
     private static final float DASH_DURATION = 0.36f; 
     private static final float SPIRIT_DURATION = 0.9f;
-    private static final float SPIRIT_SPEED = 500f;
+    private static final float SPIRIT_SPEED = 950f;
     private static final float WRAITHS_DURATION = 0.585f;
     
     private static final int SPIRIT_DAMAGE = 15;
@@ -73,7 +73,7 @@ public class EffectManager {
 
     public VisualEffect spawnVengefulSpirit(Knight knight) {
         Rectangle b = knight.getBoundingBox();
-        float h = b.height * 1.1f;
+        float h = b.height * 0.6f;
         float w = h * 1.7f;
         float cx = b.x + b.width / 2f - w / 2f;
         float x = knight.isFacingRight() ? cx + w * 0.25f : cx - w * 0.25f;
