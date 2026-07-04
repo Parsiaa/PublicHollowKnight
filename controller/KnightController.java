@@ -51,6 +51,7 @@ public class KnightController {
         handleInput(deltaTime);
         applyPhysics(deltaTime);
         checkSpikes();
+        checkAcid();
         checkVoidOut();
 
         if (knight.getCurrentState() == Entity.State.DEAD) {
@@ -65,29 +66,7 @@ public class KnightController {
     }
 
     private void handleDeathSequence(float deltaTime) {
-        Rectangle bounds = knight.getBoundingBox();
-        knight.getVelocity().x = 0f;
-
-        for (Rectangle plat : level.getPlatforms()) {
-            if (bounds.overlaps(plat)) {
-                float bCenter = bounds.x + bounds.width / 2f;
-                float pCenter = plat.x + plat.width / 2f;
-                bounds.x = (bCenter < pCenter) ? plat.x - bounds.width : plat.x + plat.width;
-            }
-        }
-
-        float prevBottom = bounds.y;
-        knight.getVelocity().y -= GRAVITY * deltaTime;
-        bounds.y += knight.getVelocity().y * deltaTime;
-        knight.onGround = false;
-        for (Rectangle plat : level.getPlatforms()) {
-            if (bounds.overlaps(plat) && knight.getVelocity().y <= 0f
-                    && prevBottom >= plat.y + plat.height - 1f) {
-                bounds.y = plat.y + plat.height;
-                knight.getVelocity().y = 0f;
-                knight.onGround = true;
-            }
-        }
+        knight.getVelocity().set(0, 0);
         deathTimer += deltaTime;
         if (deathTimer >= DEATH_ANIM_DURATION) {
             deathTimer = 0f;
@@ -321,6 +300,19 @@ public class KnightController {
                 knight.getBoundingBox().setPosition(
                         level.getLastSafePosition().x, level.getLastSafePosition().y);
             }
+            break;
+        }
+    }
+
+    private void checkAcid() {
+        if (knight.getCurrentState() == Entity.State.DEAD) return;
+        for (Rectangle acid : level.getAcid()) {
+            if (!knight.getBoundingBox().overlaps(acid)) continue;
+            knight.masks = 0;
+            knight.focusTimer = 0f;
+            knight.setCurrentState(Entity.State.DEAD);
+            deathTimer = 0f;
+            knight.getVelocity().set(0, 0);
             break;
         }
     }

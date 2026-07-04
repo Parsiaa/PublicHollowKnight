@@ -84,6 +84,13 @@ public class EffectManager {
         fx.piercing = true;
         fx.damage = (int) (SPIRIT_DAMAGE * (knight.charmVoidHeart ? 1.5f : 1f));
         effects.add(fx);
+
+        float bs = b.height * 1.1f;
+        float blastX = knight.isFacingRight() ? b.x + b.width - bs * 0.35f : b.x - bs * 0.65f;
+        float blastY = b.y + b.height / 2f - bs / 2f;
+        VisualEffect blast = new VisualEffect(EffectAnimationType.SOUL_BLAST, blastX, blastY, bs, bs, 0.36f);
+        blast.flipX = knight.isFacingRight();
+        effects.add(blast);
         return fx;
     }
 
