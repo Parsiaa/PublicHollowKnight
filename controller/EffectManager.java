@@ -74,7 +74,7 @@ public class EffectManager {
 
     public VisualEffect spawnVengefulSpirit(Knight knight) {
         Rectangle b = knight.getBoundingBox();
-        float h = b.height * 1.25f;
+        float h = b.height * 1.1f;
         float w = h * 1.7f;
         float x = knight.isFacingRight() ? b.x + b.width : b.x - w;
         float y = b.y + b.height / 2f - h / 2f;
@@ -116,8 +116,15 @@ public class EffectManager {
             }
 
             if (fx.type == EffectAnimationType.VENGEFUL_SPIRIT && level != null) {
+                // Test a small central core rather than the full (large) visual bounds, so the
+                // spirit isn't deleted the instant its art grazes the floor it flies over - it
+                // only ends when that core actually meets a wall.
+                float cw = fx.bounds.width * 0.5f, ch = fx.bounds.height * 0.35f;
+                Rectangle core = new Rectangle(
+                        fx.bounds.x + (fx.bounds.width - cw) / 2f,
+                        fx.bounds.y + (fx.bounds.height - ch) / 2f, cw, ch);
                 for (Rectangle plat : level.getPlatforms()) {
-                    if (fx.bounds.overlaps(plat)) { fx.finish(); break; }
+                    if (core.overlaps(plat)) { fx.finish(); break; }
                 }
             }
 
