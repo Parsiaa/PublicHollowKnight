@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -124,6 +125,30 @@ public class Level {
             hornheadSpawns.add(new Vector2(sx, sy));
         } else if (name.startsWith("spawnGuardian")) {
             guardianSpawns.add(new Vector2(sx, sy));
+        }
+    }
+
+    /** Clears the map tiles overlapping the given world-space rectangle across every tile layer,
+     *  so a broken breakable wall visually disappears (the tiles are baked into the map). */
+    public void hideTilesIn(Rectangle world) {
+        int tw = map.getProperties().get("tilewidth", Integer.class);
+        int th = map.getProperties().get("tileheight", Integer.class);
+        float tileW = tw * SCALE, tileH = th * SCALE;
+        int colStart = (int) Math.floor(world.x / tileW);
+        int colEnd   = (int) Math.floor((world.x + world.width - 1f) / tileW);
+        int rowStart = (int) Math.floor(world.y / tileH);
+        int rowEnd   = (int) Math.floor((world.y + world.height - 1f) / tileH);
+
+        for (MapLayer layer : map.getLayers()) {
+            if (!(layer instanceof TiledMapTileLayer)) continue;
+            TiledMapTileLayer tileLayer = (TiledMapTileLayer) layer;
+            for (int col = colStart; col <= colEnd; col++) {
+                for (int row = rowStart; row <= rowEnd; row++) {
+                    if (col >= 0 && row >= 0 && col < tileLayer.getWidth() && row < tileLayer.getHeight()) {
+                        tileLayer.setCell(col, row, null);
+                    }
+                }
+            }
         }
     }
 

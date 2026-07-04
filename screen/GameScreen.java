@@ -152,7 +152,7 @@ public class GameScreen extends ScreenAdapter {
         effectManager = new EffectManager(game.effectAssets, level);
         combat = new CombatSystem(player, enemyManager, gameCamera, level);
         cheats = new CheatController(player, enemyManager);
-        wallManager = new WallManager(level.getBreakableWalls(), player);
+        wallManager = new WallManager(level.getBreakableWalls(), player, level);
 
         zote = new Zote(level.getZoteSpawn().x, level.getZoteSpawn().y, 70f, 200f);
         zoteRenderer = new ZoteRenderer(game.zoteAssets);
