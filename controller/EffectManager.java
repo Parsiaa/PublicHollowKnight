@@ -61,18 +61,21 @@ public class EffectManager {
 
     public void spawnDash(Knight knight) {
         Rectangle b = knight.getBoundingBox();
-        float w = b.height * 0.9f;
-        float h = b.height;
-        float x = knight.isFacingRight() ? b.x - w : b.x + b.width;
-        VisualEffect fx = new VisualEffect(EffectAnimationType.DASH_EFFECT, x, b.y, w, h, DASH_DURATION);
+        float w = b.height * 1.7f;
+        float h = b.height * 1.25f;
+        // Centre it on the knight and trail it behind the dash direction so it overlaps the body
+        // (previously it sat entirely to the side and was too small to read).
+        float y = b.y + b.height / 2f - h / 2f;
+        float x = knight.isFacingRight() ? b.x + b.width - w : b.x;
+        VisualEffect fx = new VisualEffect(EffectAnimationType.DASH_EFFECT, x, y, w, h, DASH_DURATION);
         fx.flipX = knight.isFacingRight();
         effects.add(fx);
     }
 
     public VisualEffect spawnVengefulSpirit(Knight knight) {
         Rectangle b = knight.getBoundingBox();
-        float h = b.height * 0.8f;
-        float w = h * 1.6f;
+        float h = b.height * 1.25f;
+        float w = h * 1.7f;
         float x = knight.isFacingRight() ? b.x + b.width : b.x - w;
         float y = b.y + b.height / 2f - h / 2f;
         VisualEffect fx = new VisualEffect(EffectAnimationType.VENGEFUL_SPIRIT, x, y, w, h, SPIRIT_DURATION);

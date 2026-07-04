@@ -15,7 +15,9 @@ public class FalseKnightAssetManager {
     private static final int FRAME_W = 1095;
     private static final int FRAME_H = 636;
 
-    private static final int DAZED_SKIP_FRAMES = 1;
+    // DeathLand now plays in full and continuously across the LAND + DAZED stages, so no lead
+    // frame needs skipping. (Kept as a knob in case a stray opening frame ever needs trimming.)
+    private static final int DAZED_SKIP_FRAMES = 0;
 
     private final Array<Texture> textures = new Array<>();
     private final Map<FalseKnightAnimationType, Animation<TextureRegion>> anims =

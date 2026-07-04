@@ -286,15 +286,17 @@ public class FalseKnightController {
         boss.getVelocity().x = 0f;
         boss.setVulnerable(false);
         if (boss.getStateTime() >= STUN_LAND_TIME) {
+            // Keep the animation clock running (no restart) so the DeathLand emergence carries
+            // straight into the daze without snapping the head back to its first frame.
             boss.setStunStage(FalseKnight.StunStage.DAZED);
-            boss.restartStateTime();
         }
     }
 
     private void updateStunDazed(float dt) {
         boss.getVelocity().x = 0f;
         boss.setVulnerable(true);
-        if (boss.getStateTime() >= STUN_DAZED_TIME) {
+        // stateTime is continuous from the LAND stage, so the daze ends STUN_DAZED_TIME after LAND.
+        if (boss.getStateTime() >= STUN_LAND_TIME + STUN_DAZED_TIME) {
             boss.setVulnerable(false);
             boss.setStunStage(FalseKnight.StunStage.RECOVER);
             boss.restartStateTime();

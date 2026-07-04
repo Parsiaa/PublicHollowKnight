@@ -68,7 +68,9 @@ public class FalseKnightRenderer {
     private FalseKnightAnimationType pickStunAnimation(FalseKnight boss) {
         switch (boss.getStunStage()) {
             case AIR: return FalseKnightAnimationType.STUN_AIR;
-            case LAND: return FalseKnightAnimationType.STUN_LAND;
+            // LAND continues the same head-out DeathLand pose as DAZED (played continuously, without
+            // restarting) so the head no longer tucks back in between the pop and the daze.
+            case LAND: return FalseKnightAnimationType.STUN_DAZED;
             case RECOVER: return FalseKnightAnimationType.STUN_RECOVER;
             case DAZED:
             default:
