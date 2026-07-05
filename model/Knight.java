@@ -110,7 +110,7 @@ public class Knight extends Entity {
         setCurrentState(State.IDLE);
     }
 
-    public static final float POGO_VELOCITY = 2400f;
+    public static final float POGO_VELOCITY = 1800f;
 
     public boolean pogoActive = false;
 
