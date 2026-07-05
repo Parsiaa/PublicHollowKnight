@@ -27,6 +27,7 @@ public class Level {
     private final List<Rectangle> platforms = new ArrayList<>();
     private final List<Rectangle> spikes = new ArrayList<>();
     private final List<Rectangle> acid = new ArrayList<>();
+    private Rectangle waterfall = null;
 
     private final List<Vector2> mossflySpawns = new ArrayList<>();
     private final List<Vector2> crawlerSpawns = new ArrayList<>();
@@ -96,6 +97,7 @@ public class Level {
 
             if ("spike".equals(name)) spikes.add(scaled);
             else if ("acid".equals(name)) acid.add(scaled);
+            else if ("waterfall".equals(name)) waterfall = scaled;
             else if ("breakable".equals(name)) breakableWalls.add(
                 new BreakableWall(scaled.x, scaled.y, scaled.width, scaled.height));
             else if ("arena".equals(name)) arena = scaled;
@@ -165,6 +167,7 @@ public class Level {
     public List<Rectangle> getPlatforms() { return platforms; }
     public List<Rectangle> getSpikes() { return spikes; }
     public List<Rectangle> getAcid() { return acid; }
+    public Rectangle getWaterfall() { return waterfall; }
     public Vector2 getPlayerSpawn() { return playerSpawn; }
     public Vector2 getZoteSpawn() { return zoteSpawn; }
     public Vector2 getFalseKnightSpawn() { return falseKnightSpawn; }

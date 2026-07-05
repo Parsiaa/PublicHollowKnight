@@ -259,6 +259,10 @@ public class GameScreen extends ScreenAdapter {
             }
         }
 
+        if (level.getWaterfall() != null && player.getBoundingBox().overlaps(level.getWaterfall())) {
+            game.audio.playBgm(BGM_CRYSTAL);
+        }
+
         trackStats();
         playEventSounds();
 
@@ -322,10 +326,7 @@ public class GameScreen extends ScreenAdapter {
 
         int broken = 0;
         for (BreakableWall w : level.getBreakableWalls()) if (w.isBroken()) broken++;
-        if (broken > prevBrokenWalls) {
-            sfx(SFX_WALL_BREAK);
-            game.audio.playBgm(BGM_CRYSTAL);
-        }
+        if (broken > prevBrokenWalls) sfx(SFX_WALL_BREAK);
         prevBrokenWalls = broken;
     }
 
