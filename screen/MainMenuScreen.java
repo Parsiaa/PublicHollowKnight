@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import HollowKnight.hollowknight.HollowKnightGame;
+import HollowKnight.hollowknight.utils.Lang;
 
 public class MainMenuScreen extends ScreenAdapter {
     private static final float ROW_H = 50f, TOP_Y = 420f, SPACING = 60f;
@@ -24,7 +25,7 @@ public class MainMenuScreen extends ScreenAdapter {
     private final OrthographicCamera camera = new OrthographicCamera();
     private final GlyphLayout layout = new GlyphLayout();
     private final Vector3 tmp = new Vector3();
-    private final String[] items = {"Start Game", "Settings", "Guide", "Achievements", "Quit"};
+    private final String[] items = {"start_game", "settings", "guide", "achievements", "quit"};
     private int selected = 0;
     private int prevMx, prevMy;
 
@@ -73,7 +74,7 @@ public class MainMenuScreen extends ScreenAdapter {
 
         for (int i = 0; i < items.length; i++) {
             game.fontLarge.setColor(i == selected ? new Color(0.85f, 0.7f, 0.15f, 1f) : Color.WHITE);
-            layout.setText(game.fontLarge, items[i]);
+            layout.setText(game.fontLarge, Lang.t(items[i]));
             game.fontLarge.draw(game.batch, layout, (800 - layout.width) / 2f, TOP_Y - i * SPACING);
         }
 

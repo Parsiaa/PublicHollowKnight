@@ -14,11 +14,12 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import HollowKnight.hollowknight.HollowKnightGame;
 import HollowKnight.hollowknight.model.Settings;
+import HollowKnight.hollowknight.utils.Lang;
 
 public class SettingsScreen extends ScreenAdapter {
     private static final float TOP = 470f, SPACING = 64f, ROW_H = 52f;
     private static final float TRACK_X = 420f, TRACK_W = 280f, TRACK_H = 10f;
-    private static final int ROWS = 6;
+    private static final int ROWS = 7;
 
     private final HollowKnightGame game;
     private final Screen back;
@@ -71,6 +72,10 @@ public class SettingsScreen extends ScreenAdapter {
             if (Gdx.input.isKeyJustPressed(Keys.LEFT))  setVolume(selected, volume(selected) - 0.05f);
             if (Gdx.input.isKeyJustPressed(Keys.RIGHT)) setVolume(selected, volume(selected) + 0.05f);
         }
+        if (selected == 5) {
+            if (Gdx.input.isKeyJustPressed(Keys.LEFT))  { s.language = (s.language + Lang.COUNT - 1) % Lang.COUNT; s.save(); }
+            if (Gdx.input.isKeyJustPressed(Keys.RIGHT)) Lang.cycle();
+        }
 
         if (Gdx.input.justTouched() && hov != -1) {
             selected = hov;
@@ -94,7 +99,8 @@ public class SettingsScreen extends ScreenAdapter {
             case 1: s.musicEnabled = !s.musicEnabled; break;
             case 3: s.sfxEnabled = !s.sfxEnabled; break;
             case 4: s.resetSfx(); break;
-            case 5: goBack(); return;
+            case 5: Lang.cycle(); return;
+            case 6: goBack(); return;
             default: return;
         }
         s.save();
@@ -120,17 +126,20 @@ public class SettingsScreen extends ScreenAdapter {
         game.batch.begin();
 
         game.fontLarge.setColor(0.85f, 0.7f, 0.15f, 1f);
-        game.fontLarge.draw(game.batch, "SETTINGS", 300, 560);
+        layout.setText(game.fontLarge, Lang.t("settings_title"));
+        game.fontLarge.draw(game.batch, layout, (800 - layout.width) / 2f, 560);
 
-        label(0, "Music Volume", Math.round(s.musicVolume * 100) + "%");
-        label(1, "Music", s.musicEnabled ? "On" : "Off");
-        label(2, "SFX Volume", Math.round(s.sfxVolume * 100) + "%");
-        label(3, "SFX", s.sfxEnabled ? "On" : "Off");
-        label(4, "Reset SFX", "");
-        label(5, "Back", "");
+        String on = Lang.t("on"), off = Lang.t("off");
+        label(0, Lang.t("music_volume"), Math.round(s.musicVolume * 100) + "%");
+        label(1, Lang.t("music"), s.musicEnabled ? on : off);
+        label(2, Lang.t("sfx_volume"), Math.round(s.sfxVolume * 100) + "%");
+        label(3, Lang.t("sfx"), s.sfxEnabled ? on : off);
+        label(4, Lang.t("reset_sfx"), "");
+        label(5, Lang.t("language"), Lang.langName());
+        label(6, Lang.t("back"), "");
 
         game.fontMedium.setColor(0.5f, 0.5f, 0.5f, 1f);
-        layout.setText(game.fontMedium, "Arrows: navigate / adjust    Enter / Click: select    Esc: back");
+        layout.setText(game.fontMedium, Lang.t("settings_hint"));
         game.fontMedium.draw(game.batch, layout, (800 - layout.width) / 2f, 70);
         game.batch.end();
     }

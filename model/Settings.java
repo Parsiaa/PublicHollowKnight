@@ -17,6 +17,7 @@ public class Settings {
     public boolean musicEnabled;
     public boolean sfxEnabled;
     public int     menuBackground;
+    public int     language;
 
     private Settings() {
         Preferences p = Gdx.app.getPreferences(PREFS);
@@ -25,6 +26,7 @@ public class Settings {
         musicEnabled   = p.getBoolean("musicEnabled", true);
         sfxEnabled     = p.getBoolean("sfxEnabled", true);
         menuBackground = p.getInteger("menuBackground", 0);
+        language       = p.getInteger("language", 0);
     }
 
     public void resetSfx() { sfxVolume = 0.8f; sfxEnabled = true; }
@@ -36,6 +38,7 @@ public class Settings {
         p.putBoolean("musicEnabled", musicEnabled);
         p.putBoolean("sfxEnabled", sfxEnabled);
         p.putInteger("menuBackground", menuBackground);
+        p.putInteger("language", language);
         p.flush();
     }
 }

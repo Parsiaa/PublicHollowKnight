@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 
 import HollowKnight.hollowknight.HollowKnightGame;
+import HollowKnight.hollowknight.utils.Lang;
 
 public class PauseScreen extends ScreenAdapter {
     private static final float ROW_H = 50f, TOP_Y = 380f, SPACING = 60f;
@@ -22,7 +23,7 @@ public class PauseScreen extends ScreenAdapter {
     private final GlyphLayout layout = new GlyphLayout();
     private final Vector3 tmp = new Vector3();
 
-    private final String[] items = {"Continue", "Settings", "Cheat Codes", "Save & Quit"};
+    private final String[] items = {"continue", "settings", "cheat_codes", "save_quit"};
     private final String[] cheatLines = {
         "Hold Left Ctrl +", "T Teleport to boss   N Noclip",
         "H Heal   R Refill Soul   G God Mode   K Kill All"
@@ -56,12 +57,12 @@ public class PauseScreen extends ScreenAdapter {
         game.batch.begin();
 
         game.fontLarge.setColor(0.85f, 0.7f, 0.15f, 1f);
-        layout.setText(game.fontLarge, "PAUSED");
+        layout.setText(game.fontLarge, Lang.t("paused"));
         game.fontLarge.draw(game.batch, layout, (800 - layout.width) / 2f, 480);
 
         for (int i = 0; i < items.length; i++) {
             game.fontMedium.setColor(i == selected ? new Color(0.85f, 0.7f, 0.15f, 1f) : Color.WHITE);
-            layout.setText(game.fontMedium, items[i]);
+            layout.setText(game.fontMedium, Lang.t(items[i]));
             game.fontMedium.draw(game.batch, layout, (800 - layout.width) / 2f, TOP_Y - i * SPACING);
         }
 

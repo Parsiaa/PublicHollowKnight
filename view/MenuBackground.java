@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import HollowKnight.hollowknight.model.Settings;
+import HollowKnight.hollowknight.utils.Lang;
 
 
 public class MenuBackground {
@@ -18,19 +19,24 @@ public class MenuBackground {
         "background/bg2.png",
         "background/bg3.png"
     };
-    private static final String TITLE_PATH = "background/title.png";
-
+    private static final String[] TITLE_PATHS = {
+        "background/title.png",
+        "background/title_fr.png",
+        "background/title_es.png"
+    };
 
     private static final float TITLE_MAX_W = 560f, TITLE_MAX_H = 150f, TITLE_CY = 512f;
 
     private final List<Texture> backgrounds = new ArrayList<>();
-    private Texture title;
+    private final Texture[] titles = new Texture[TITLE_PATHS.length];
 
     public MenuBackground() {
         for (String p : PATHS) {
             if (Gdx.files.internal(p).exists()) backgrounds.add(new Texture(Gdx.files.internal(p)));
         }
-        if (Gdx.files.internal(TITLE_PATH).exists()) title = new Texture(Gdx.files.internal(TITLE_PATH));
+        for (int i = 0; i < TITLE_PATHS.length; i++) {
+            if (Gdx.files.internal(TITLE_PATHS[i]).exists()) titles[i] = new Texture(Gdx.files.internal(TITLE_PATHS[i]));
+        }
     }
 
     public boolean hasBackgrounds() { return !backgrounds.isEmpty(); }
@@ -54,6 +60,8 @@ public class MenuBackground {
     }
 
     public void drawTitle(SpriteBatch batch) {
+        Texture title = titles[Lang.index()];
+        if (title == null) title = titles[Lang.EN];
         if (title == null) return;
         batch.setColor(Color.WHITE);
         float scale = Math.min(TITLE_MAX_W / title.getWidth(), TITLE_MAX_H / title.getHeight());
@@ -64,6 +72,8 @@ public class MenuBackground {
     public void dispose() {
         for (Texture t : backgrounds) t.dispose();
         backgrounds.clear();
-        if (title != null) { title.dispose(); title = null; }
+        for (int i = 0; i < titles.length; i++) {
+            if (titles[i] != null) { titles[i].dispose(); titles[i] = null; }
+        }
     }
 }
