@@ -433,6 +433,10 @@ public class GameScreen extends ScreenAdapter {
             effectManager.spawnDash(player);
             sfx(SFX_DASH);
         }
+        if (player.requestWings) {
+            player.requestWings = false;
+            effectManager.spawnWings(player);
+        }
         if (player.requestVengefulSpirit) {
             player.requestVengefulSpirit = false;
             effectManager.spawnVengefulSpirit(player);

@@ -17,12 +17,14 @@ public class EffectAssetManager {
     public void load() {
         for (EffectAnimationType type : EffectAnimationType.values()) {
             Animation<TextureRegion> anim = loadFromSheet(type);
+            if (anim == null) continue;
             anim.setPlayMode(Animation.PlayMode.NORMAL);
             animations.put(type, anim);
         }
     }
 
     private Animation<TextureRegion> loadFromSheet(EffectAnimationType type) {
+        if (!Gdx.files.internal(type.path).exists()) return null;
         Texture texture = textures.computeIfAbsent(
                 type.path,
                 path -> new Texture(Gdx.files.internal(path)));

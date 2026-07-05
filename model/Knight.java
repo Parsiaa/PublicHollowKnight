@@ -39,6 +39,7 @@ public class Knight extends Entity {
     public boolean requestHowlingWraiths = false;
     public boolean requestDashEffect = false;
     public boolean requestSlashEffect = false;
+    public boolean requestWings = false;
 
     public Knight(float x, float y, float width, float height) {
         super(x, y, width, height);

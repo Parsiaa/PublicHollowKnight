@@ -106,6 +106,16 @@ public class EffectManager {
         return fx;
     }
 
+    public void spawnWings(Knight knight) {
+        Rectangle b = knight.getBoundingBox();
+        float w = b.width * 2.4f;
+        float h = b.height * 1.1f;
+        float x = b.x + b.width / 2f - w / 2f;
+        float y = b.y + b.height * 0.35f;
+        VisualEffect fx = new VisualEffect(EffectAnimationType.WINGS, x, y, w, h, 0.32f);
+        effects.add(fx);
+    }
+
     public void spawnHitShockwave(float x, float y) {
         float size = 160f;
         VisualEffect fx = new VisualEffect(EffectAnimationType.HIT_SHOCKWAVE, x - size / 2f, y - size / 2f, size, size, 0.3f);

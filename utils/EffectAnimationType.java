@@ -10,6 +10,7 @@ public enum EffectAnimationType {
     DASH_EFFECT     ("animation/Effects/Dash Effect.png",     8, 1, 8,  false),
     VENGEFUL_SPIRIT ("animation/Effects/SoulBall.png",         4, 1, 4,  false),
     SOUL_BLAST      ("animation/Effects/BlastSoul.png",         8, 1, 8,  false),
+    WINGS           ("animation/Effects/Wings.png",             8, 1, 8,  false),
     HOWLING_WRAITHS ("animation/Effects/ShadowScream.png",    14, 1, 14, false),
     HIT_SHOCKWAVE   ("animation/Effects/Shockwave.png",        8, 1, 8,  false);
 

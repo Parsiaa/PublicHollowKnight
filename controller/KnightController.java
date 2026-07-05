@@ -202,6 +202,7 @@ public class KnightController {
                 knight.getVelocity().y = JUMP_VELOCITY * 0.8f;
                 knight.setCurrentState(Entity.State.DOUBLE_JUMPING);
                 knight.canDoubleJump = false;
+                knight.requestWings = true;
                 transitionTimer = 0;
             }
         }
