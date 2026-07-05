@@ -17,7 +17,7 @@ import HollowKnight.hollowknight.model.Settings;
 import HollowKnight.hollowknight.utils.Lang;
 
 public class SettingsScreen extends ScreenAdapter {
-    private static final float TOP = 470f, SPACING = 64f, ROW_H = 52f;
+    private static final float TOP = 490f, SPACING = 52f, ROW_H = 44f;
     private static final float TRACK_X = 420f, TRACK_W = 280f, TRACK_H = 10f;
     private static final int ROWS = 8;
 
