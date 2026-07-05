@@ -82,7 +82,9 @@ public class InventoryMenu {
     public void update() {
         if (!open) return;
 
-        if (Gdx.input.isKeyJustPressed(Keys.I) || Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
+        if (Gdx.input.isKeyJustPressed(HollowKnight.hollowknight.model.Keybinds.get().key(
+                HollowKnight.hollowknight.model.Keybinds.Action.INVENTORY))
+                || Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
             open = false;
             return;
         }

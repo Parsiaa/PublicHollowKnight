@@ -1,9 +1,10 @@
 package HollowKnight.hollowknight.controller;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Rectangle;
 import HollowKnight.hollowknight.model.Entity;
+import HollowKnight.hollowknight.model.Keybinds;
+import HollowKnight.hollowknight.model.Keybinds.Action;
 import HollowKnight.hollowknight.model.Knight;
 import HollowKnight.hollowknight.model.Level;
 
@@ -37,6 +38,9 @@ public class KnightController {
         this.knight = knight;
         this.level = level;
     }
+
+    private boolean pressed(Action a) { return Gdx.input.isKeyPressed(Keybinds.get().key(a)); }
+    private boolean justPressed(Action a) { return Gdx.input.isKeyJustPressed(Keybinds.get().key(a)); }
 
     public void update(float deltaTime) {
         if (knight.getCurrentState() == Entity.State.DEAD) {
@@ -97,7 +101,7 @@ public class KnightController {
         Entity.State state = knight.getCurrentState();
         if (knight.castLockTimer > 0) return;
 
-        if (Gdx.input.isKeyPressed(Keys.A) && knight.onGround) {
+        if (pressed(Action.FOCUS) && knight.onGround) {
             knight.getVelocity().x = 0;
             Entity.State cur = knight.getCurrentState();
 
@@ -144,14 +148,14 @@ public class KnightController {
             knight.setCurrentState(knight.onGround ? Entity.State.IDLE : Entity.State.FALLING);
         }
 
-        if (Gdx.input.isKeyJustPressed(Keys.Q) && knight.soul >= SPELL_SOUL_COST) {
+        if (justPressed(Action.CAST_SPIRIT) && knight.soul >= SPELL_SOUL_COST) {
             knight.soul -= SPELL_SOUL_COST;
             knight.castLockTimer = CAST_LOCK_DURATION;
             knight.setCurrentState(Entity.State.CASTING_FIREBALL);
             knight.requestVengefulSpirit = true;
             return;
         }
-        if (Gdx.input.isKeyJustPressed(Keys.W) && knight.soul >= SPELL_SOUL_COST) {
+        if (justPressed(Action.CAST_WRAITHS) && knight.soul >= SPELL_SOUL_COST) {
             knight.soul -= SPELL_SOUL_COST;
             knight.castLockTimer = CAST_LOCK_DURATION;
             knight.setCurrentState(Entity.State.CASTING_SCREAM);
@@ -160,7 +164,7 @@ public class KnightController {
         }
 
         if (state != Entity.State.DASHING
-                && Gdx.input.isKeyJustPressed(Keys.C)
+                && justPressed(Action.DASH)
                 && knight.canDash && knight.dashCooldown <= 0) {
             knight.setCurrentState(Entity.State.DASHING);
             knight.dashTimer = DASH_DURATION;
@@ -174,18 +178,18 @@ public class KnightController {
         if (state == Entity.State.DASHING) return;
 
         float targetVx = 0;
-        if (Gdx.input.isKeyPressed(Keys.LEFT)) {
+        if (pressed(Action.LEFT)) {
             targetVx = -MOVE_SPEED;
             knight.setFacingRight(false);
             if (isBreakableTransition()) transitionTimer = 0;
-        } else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
+        } else if (pressed(Action.RIGHT)) {
             targetVx = MOVE_SPEED;
             knight.setFacingRight(true);
             if (isBreakableTransition()) transitionTimer = 0;
         }
         knight.getVelocity().x = targetVx;
 
-        if (Gdx.input.isKeyJustPressed(Keys.Z)) {
+        if (justPressed(Action.JUMP)) {
             knight.pogoActive = false;
             if (knight.onGround) {
                 knight.getVelocity().y = JUMP_VELOCITY;
@@ -207,16 +211,16 @@ public class KnightController {
             }
         }
 
-        if (!Gdx.input.isKeyPressed(Keys.Z) && knight.getVelocity().y > 0 && !knight.pogoActive)
+        if (!pressed(Action.JUMP) && knight.getVelocity().y > 0 && !knight.pogoActive)
             knight.getVelocity().y *= 0.5f;
 
-        if (Gdx.input.isKeyJustPressed(Keys.X) && knight.attackTimer <= 0) {
+        if (justPressed(Action.ATTACK) && knight.attackTimer <= 0) {
             knight.attackTimer = knight.attackCooldown;
             transitionTimer = 0;
             knight.requestSlashEffect = true;
-            if (!knight.onGround && Gdx.input.isKeyPressed(Keys.DOWN)) {
+            if (!knight.onGround && pressed(Action.DOWN)) {
                 knight.setCurrentState(Entity.State.DOWN_SLASH);
-            } else if (Gdx.input.isKeyPressed(Keys.UP)) {
+            } else if (pressed(Action.UP)) {
                 knight.setCurrentState(Entity.State.UP_SLASH);
             } else {
                 alternateSlash = !alternateSlash;
@@ -225,8 +229,8 @@ public class KnightController {
         }
 
         if (knight.attackTimer <= 0 && knight.onGround) {
-            if (Gdx.input.isKeyJustPressed(Keys.UP)) knight.setCurrentState(Entity.State.LOOKING_UP);
-            if (Gdx.input.isKeyJustPressed(Keys.DOWN)) knight.setCurrentState(Entity.State.LOOKING_DOWN);
+            if (justPressed(Action.UP)) knight.setCurrentState(Entity.State.LOOKING_UP);
+            if (justPressed(Action.DOWN)) knight.setCurrentState(Entity.State.LOOKING_DOWN);
         }
     }
 
@@ -246,8 +250,8 @@ public class KnightController {
             if (knight.dashTimer <= 0) knight.setCurrentState(Entity.State.FALLING);
         } else {
             boolean wallSliding = knight.isAgainstWall && knight.getVelocity().y < 0
-                    && ((knight.isFacingRight() && Gdx.input.isKeyPressed(Keys.RIGHT))
-                     || (!knight.isFacingRight() && Gdx.input.isKeyPressed(Keys.LEFT)));
+                    && ((knight.isFacingRight() && pressed(Action.RIGHT))
+                     || (!knight.isFacingRight() && pressed(Action.LEFT)));
             knight.getVelocity().y = wallSliding
                     ? WALL_SLIDE_SPEED
                     : knight.getVelocity().y - GRAVITY * deltaTime;

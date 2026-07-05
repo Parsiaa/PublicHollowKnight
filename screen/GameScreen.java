@@ -29,6 +29,7 @@ import HollowKnight.hollowknight.model.Enemy;
 import HollowKnight.hollowknight.model.Entity;
 import HollowKnight.hollowknight.model.FalseKnight;
 import HollowKnight.hollowknight.model.GameData;
+import HollowKnight.hollowknight.model.Keybinds;
 import HollowKnight.hollowknight.model.Knight;
 import HollowKnight.hollowknight.model.Level;
 import HollowKnight.hollowknight.model.Zote;
@@ -48,6 +49,7 @@ import HollowKnight.hollowknight.view.ZoteRenderer;
 public class GameScreen extends ScreenAdapter {
     private static final float VIEW_W = 800f, VIEW_H = 600f;
     private static final String BGM = "audio/greenpath.wav";
+    private static final String BGM_CRYSTAL = "audio/crystalpeaks.wav";
 
     private static final float BOSS_W = 260f;
     private static final float BOSS_H = 300f;
@@ -217,7 +219,8 @@ public class GameScreen extends ScreenAdapter {
             return;
         }
 
-        if (Gdx.input.isKeyJustPressed(Keys.I) && player.getCurrentState() != Entity.State.DEAD) {
+        if (Gdx.input.isKeyJustPressed(Keybinds.get().key(Keybinds.Action.INVENTORY))
+                && player.getCurrentState() != Entity.State.DEAD) {
             inventoryMenu.toggle();
             return;
         }
@@ -319,7 +322,10 @@ public class GameScreen extends ScreenAdapter {
 
         int broken = 0;
         for (BreakableWall w : level.getBreakableWalls()) if (w.isBroken()) broken++;
-        if (broken > prevBrokenWalls) sfx(SFX_WALL_BREAK);
+        if (broken > prevBrokenWalls) {
+            sfx(SFX_WALL_BREAK);
+            game.audio.playBgm(BGM_CRYSTAL);
+        }
         prevBrokenWalls = broken;
     }
 

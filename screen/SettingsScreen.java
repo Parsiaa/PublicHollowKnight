@@ -19,7 +19,7 @@ import HollowKnight.hollowknight.utils.Lang;
 public class SettingsScreen extends ScreenAdapter {
     private static final float TOP = 470f, SPACING = 64f, ROW_H = 52f;
     private static final float TRACK_X = 420f, TRACK_W = 280f, TRACK_H = 10f;
-    private static final int ROWS = 7;
+    private static final int ROWS = 8;
 
     private final HollowKnightGame game;
     private final Screen back;
@@ -100,7 +100,8 @@ public class SettingsScreen extends ScreenAdapter {
             case 3: s.sfxEnabled = !s.sfxEnabled; break;
             case 4: s.resetSfx(); break;
             case 5: Lang.cycle(); return;
-            case 6: goBack(); return;
+            case 6: game.setScreen(new KeybindsScreen(game, this)); return;
+            case 7: goBack(); return;
             default: return;
         }
         s.save();
@@ -136,7 +137,8 @@ public class SettingsScreen extends ScreenAdapter {
         label(3, Lang.t("sfx"), s.sfxEnabled ? on : off);
         label(4, Lang.t("reset_sfx"), "");
         label(5, Lang.t("language"), Lang.langName());
-        label(6, Lang.t("back"), "");
+        label(6, Lang.t("controls"), "");
+        label(7, Lang.t("back"), "");
 
         game.fontMedium.setColor(0.5f, 0.5f, 0.5f, 1f);
         layout.setText(game.fontMedium, Lang.t("settings_hint"));

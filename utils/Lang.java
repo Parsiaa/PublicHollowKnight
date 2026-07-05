@@ -31,6 +31,7 @@ public class Lang {
         put("sfx",           "SFX",          "SFX",              "SFX");
         put("reset_sfx",     "Reset SFX",    "R\u00e9init. SFX", "Restablecer SFX");
         put("language",      "Language",     "Langue",           "Idioma");
+        put("controls",      "Controls",     "Contr\u00f4les",   "Controles");
         put("back",          "Back",         "Retour",           "Atr\u00e1s");
         put("on",            "On",           "Oui",              "S\u00ed");
         put("off",           "Off",          "Non",              "No");
