@@ -22,8 +22,8 @@ public class HuskHornhead extends Enemy {
     private static final float TURN_DURATION = 0.16f;
     private static final float CLIFF_PROBE = 8f;
 
-    private static final float SIGHT_WIDTH = 260f;
-    private static final float SIGHT_HEIGHT = 120f;
+    private static final float SIGHT_WIDTH = 800f;
+    private static final float SIGHT_HEIGHT = 200f;
 
     private float stateLocalTimer = 0f;
     private float walkedDistance = 0f;

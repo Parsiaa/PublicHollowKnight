@@ -133,7 +133,7 @@ public class Level {
             crawlerSpawns.add(new Vector2(sx, sy));
         } else if (name.startsWith("spawnHornhead")) {
             hornheadSpawns.add(new Vector2(sx, sy));
-        } else if (name.startsWith("spawnGuardian")) {
+        } else if (name.startsWith("spawnGuardian") || name.startsWith("spawnCrystal")) {
             guardianSpawns.add(new Vector2(sx, sy));
         }
     }
