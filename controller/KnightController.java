@@ -74,7 +74,7 @@ public class KnightController {
         deathTimer += deltaTime;
         if (deathTimer >= DEATH_ANIM_DURATION) {
             deathTimer = 0f;
-            knight.respawnAt(level.getLastSafePosition().x, level.getLastSafePosition().y);
+            knight.respawnAt(level.getPlayerSpawn().x, level.getPlayerSpawn().y);
         }
     }
 
