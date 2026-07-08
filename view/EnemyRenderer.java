@@ -15,7 +15,7 @@ import HollowKnight.hollowknight.utils.EnemyAssetManager;
 public class EnemyRenderer {
 
     private static final float CRAWLER_SCALE = 4.5f;
-    private static final float GUARDIAN_SCALE = 1.8f;
+    private static final float GUARDIAN_SCALE = 3.6f;
     private static final float HORNHEAD_SCALE = 4.2f;
     private static final float MOSSFLY_SPRITE_SIZE = 310f;
 
