@@ -13,28 +13,26 @@ public class Lang {
     private static final Map<String, String[]> T = new HashMap<>();
 
     static {
-        put("start_game",    "Start Game",   "Commencer",        "Empezar");
-        put("settings",      "Settings",     "Param\u00e8tres",  "Ajustes");
-        put("guide",         "Guide",        "Guide",            "Gu\u00eda");
-        put("achievements",  "Achievements", "Succ\u00e8s",      "Logros");
-        put("quit",          "Quit",         "Quitter",          "Salir");
-
-        put("paused",        "PAUSED",       "EN PAUSE",         "PAUSA");
-        put("continue",      "Continue",     "Continuer",        "Continuar");
-        put("cheat_codes",   "Cheat Codes",  "Codes de Triche",  "Trucos");
-        put("save_quit",     "Save & Quit",  "Sauver & Quitter", "Guardar y Salir");
-
-        put("settings_title","SETTINGS",     "PARAM\u00c8TRES",  "AJUSTES");
-        put("music_volume",  "Music Volume", "Volume Musique",   "Volumen M\u00fasica");
-        put("music",         "Music",        "Musique",          "M\u00fasica");
-        put("sfx_volume",    "SFX Volume",   "Volume SFX",       "Volumen SFX");
-        put("sfx",           "SFX",          "SFX",              "SFX");
-        put("reset_sfx",     "Reset SFX",    "R\u00e9init. SFX", "Restablecer SFX");
-        put("language",      "Language",     "Langue",           "Idioma");
-        put("controls",      "Controls",     "Contr\u00f4les",   "Controles");
-        put("back",          "Back",         "Retour",           "Atr\u00e1s");
-        put("on",            "On",           "Oui",              "S\u00ed");
-        put("off",           "Off",          "Non",              "No");
+        put("start_game", "Start Game", "Commencer", "Empezar");
+        put("settings", "Settings", "Param\u00e8tres", "Ajustes");
+        put("guide", "Guide", "Guide", "Gu\u00eda");
+        put("achievements", "Achievements", "Succ\u00e8s", "Logros");
+        put("quit", "Quit", "Quitter", "Salir");
+        put("paused", "PAUSED", "EN PAUSE", "PAUSA");
+        put("continue", "Continue", "Continuer", "Continuar");
+        put("cheat_codes", "Cheat Codes", "Codes de Triche", "Trucos");
+        put("save_quit", "Save & Quit", "Sauver & Quitter", "Guardar y Salir");
+        put("settings_title", "SETTINGS", "PARAM\u00c8TRES", "AJUSTES");
+        put("music_volume", "Music Volume", "Volume Musique", "Volumen M\u00fasica");
+        put("music", "Music", "Musique", "M\u00fasica");
+        put("sfx_volume", "SFX Volume", "Volume SFX", "Volumen SFX");
+        put("sfx", "SFX", "SFX", "SFX");
+        put("reset_sfx", "Reset SFX", "R\u00e9init. SFX", "Restablecer SFX");
+        put("language", "Language", "Langue", "Idioma");
+        put("controls", "Controls", "Contr\u00f4les", "Controles");
+        put("back", "Back", "Retour", "Atr\u00e1s");
+        put("on", "On", "Oui", "S\u00ed");
+        put("off", "Off", "Non", "No");
         put("settings_hint",
                 "Arrows: navigate / adjust    Enter / Click: select    Esc: back",
                 "Fl\u00e8ches: naviguer / r\u00e9gler    Entr\u00e9e / Clic: choisir    \u00c9chap: retour",
