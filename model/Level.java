@@ -27,6 +27,8 @@ public class Level {
     private final List<Rectangle> platforms = new ArrayList<>();
     private final List<Rectangle> spikes = new ArrayList<>();
     private final List<Rectangle> acid = new ArrayList<>();
+    private final List<Rectangle> portalBounds = new ArrayList<>();
+    private final List<String> portalTargets = new ArrayList<>();
     private Rectangle waterfall = null;
 
     private final List<Vector2> mossflySpawns = new ArrayList<>();
@@ -101,6 +103,10 @@ public class Level {
             else if ("breakable".equals(name)) breakableWalls.add(
                 new BreakableWall(scaled.x, scaled.y, scaled.width, scaled.height));
             else if ("arena".equals(name)) arena = scaled;
+            else if ("portal".equals(name)) {
+                portalBounds.add(scaled);
+                portalTargets.add(object.getProperties().get("target", "", String.class));
+            }
             else platforms.add(scaled);
         }
     }
@@ -127,7 +133,7 @@ public class Level {
             crawlerSpawns.add(new Vector2(sx, sy));
         } else if (name.startsWith("spawnHornhead")) {
             hornheadSpawns.add(new Vector2(sx, sy));
-        } else if (name.startsWith("spawnGuardian")) {
+        } else if (name.startsWith("spawnGuardian") || name.startsWith("spawnCrystal")) {
             guardianSpawns.add(new Vector2(sx, sy));
         }
     }
@@ -167,6 +173,16 @@ public class Level {
     public List<Rectangle> getPlatforms() { return platforms; }
     public List<Rectangle> getSpikes() { return spikes; }
     public List<Rectangle> getAcid() { return acid; }
+
+    public int portalIndexAt(Rectangle box) {
+        for (int i = 0; i < portalBounds.size(); i++) {
+            if (portalBounds.get(i).overlaps(box)) return i;
+        }
+        return -1;
+    }
+
+    public String getPortalTarget(int i) { return portalTargets.get(i); }
+
     public Rectangle getWaterfall() { return waterfall; }
     public Vector2 getPlayerSpawn() { return playerSpawn; }
     public Vector2 getZoteSpawn() { return zoteSpawn; }

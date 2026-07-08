@@ -15,6 +15,7 @@ public class GameData {
     public boolean charmSharpShadow = false;
     public boolean charmVoidHeart = false;
     public long playTimeMillis = 0L;
+    public String mapName = null;
     public boolean used = false;
 
     public GameData() {}

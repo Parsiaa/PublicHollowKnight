@@ -48,8 +48,14 @@ import HollowKnight.hollowknight.view.ZoteRenderer;
 
 public class GameScreen extends ScreenAdapter {
     private static final float VIEW_W = 800f, VIEW_H = 600f;
+    private static final String MAP_GREENPATH = "GreenpathMap.tmx";
+    private static final String MAP_CRYSTAL = "CrystalPeaksMap.tmx";
     private static final String BGM = "audio/greenpath.wav";
     private static final String BGM_CRYSTAL = "audio/crystalpeaks.wav";
+
+    private static String bgmForMap(String map) {
+        return MAP_CRYSTAL.equals(map) ? BGM_CRYSTAL : BGM;
+    }
 
     private static final float BOSS_W = 260f;
     private static final float BOSS_H = 300f;
@@ -122,6 +128,8 @@ public class GameScreen extends ScreenAdapter {
     private int prevBrokenWalls = 0;
 
     private final int saveSlot;
+    private final String mapName;
+    private final String bgmPath;
     private long playTimeMillis = 0L;
     private boolean disposed = false;
 
@@ -130,11 +138,23 @@ public class GameScreen extends ScreenAdapter {
     }
 
     public GameScreen(HollowKnightGame game, int saveSlot) {
+        this(game, saveSlot, resolveMapName(game, saveSlot), null);
+    }
+
+    private static String resolveMapName(HollowKnightGame game, int saveSlot) {
+        if (saveSlot < 0) return MAP_GREENPATH;
+        GameData d = game.saveManager.load(saveSlot);
+        return (d != null && d.mapName != null && !d.mapName.isEmpty()) ? d.mapName : MAP_GREENPATH;
+    }
+
+    private GameScreen(HollowKnightGame game, int saveSlot, String mapName, GameData carry) {
         this.game = game;
         this.batch = game.batch;
         this.saveSlot = saveSlot;
+        this.mapName = mapName;
+        this.bgmPath = bgmForMap(mapName);
 
-        GameData loaded = (saveSlot >= 0) ? game.saveManager.load(saveSlot) : null;
+        GameData loaded = (carry != null) ? carry : ((saveSlot >= 0) ? game.saveManager.load(saveSlot) : null);
         this.bossAlreadyCleared = (loaded != null && loaded.bossDefeated);
 
         camera = new OrthographicCamera();
@@ -143,7 +163,7 @@ public class GameScreen extends ScreenAdapter {
         viewport = new FitViewport(VIEW_W, VIEW_H, camera);
         gameCamera = new GameCamera(camera, VIEW_W, VIEW_H);
 
-        level = new Level("GreenpathMap.tmx");
+        level = new Level(mapName);
         player = new Knight(level.getPlayerSpawn().x, level.getPlayerSpawn().y, 96f, 288f);
         camera.position.set(player.getBoundingBox().x, player.getBoundingBox().y, 0);
         camera.update();
@@ -199,7 +219,7 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        game.audio.playBgm(BGM);
+        game.audio.playBgm(bgmPath);
     }
 
     @Override
@@ -261,6 +281,12 @@ public class GameScreen extends ScreenAdapter {
 
         if (level.getWaterfall() != null && player.getBoundingBox().overlaps(level.getWaterfall())) {
             game.audio.playBgm(BGM_CRYSTAL);
+        }
+
+        int portalIndex = level.portalIndexAt(player.getBoundingBox());
+        if (portalIndex >= 0 && player.getCurrentState() != Entity.State.DEAD) {
+            goToPortal(level.getPortalTarget(portalIndex));
+            return;
         }
 
         trackStats();
@@ -352,6 +378,17 @@ public class GameScreen extends ScreenAdapter {
         game.setScreen(vs);
     }
 
+    private void goToPortal(String target) {
+        if (target == null || target.isEmpty()) return;
+        GameData carry = captureState();
+        carry.spawnX = 0f;
+        carry.spawnY = 0f;
+        carry.mapName = target;
+        GameScreen next = new GameScreen(game, saveSlot, target, carry);
+        dispose();
+        game.setScreen(next);
+    }
+
     public void renderWorld() {
         ScreenUtils.clear(0.05f, 0.05f, 0.08f, 1f);
         level.renderBackground(camera);
@@ -394,6 +431,7 @@ public class GameScreen extends ScreenAdapter {
         d.charmSharpShadow = player.charmSharpShadow;
         d.charmVoidHeart = player.charmVoidHeart;
         d.playTimeMillis = playTimeMillis;
+        d.mapName = mapName;
         return d;
     }
 
