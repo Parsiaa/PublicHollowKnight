@@ -10,16 +10,17 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import HollowKnight.hollowknight.HollowKnightGame;
+import HollowKnight.hollowknight.utils.Lang;
 
 public class VictoryScreen extends ScreenAdapter {
     private static final float TOP_Y = 300f, SPACING = 60f, ROW_H = 50f;
+    private static final int ITEM_COUNT = 2;
 
     private final HollowKnightGame game;
     private final OrthographicCamera camera = new OrthographicCamera();
     private final GlyphLayout layout = new GlyphLayout();
     private final Vector3 tmp = new Vector3();
 
-    private final String[] items = {"Restart", "Main Menu"};
     private final int deaths;
     private final int kills;
     private final long timeMillis;
@@ -39,8 +40,8 @@ public class VictoryScreen extends ScreenAdapter {
 
     @Override
     public void render(float dt) {
-        if (Gdx.input.isKeyJustPressed(Keys.UP)) selected = (selected + items.length - 1) % items.length;
-        if (Gdx.input.isKeyJustPressed(Keys.DOWN)) selected = (selected + 1) % items.length;
+        if (Gdx.input.isKeyJustPressed(Keys.UP)) selected = (selected + ITEM_COUNT - 1) % ITEM_COUNT;
+        if (Gdx.input.isKeyJustPressed(Keys.DOWN)) selected = (selected + 1) % ITEM_COUNT;
 
         int mx = Gdx.input.getX(), my = Gdx.input.getY();
         boolean moved = (mx != prevMx || my != prevMy);
@@ -59,17 +60,18 @@ public class VictoryScreen extends ScreenAdapter {
         game.batch.begin();
 
         game.fontLarge.setColor(0.85f, 0.7f, 0.15f, 1f);
-        layout.setText(game.fontLarge, "VICTORY");
+        layout.setText(game.fontLarge, Lang.t("victory"));
         game.fontLarge.draw(game.batch, layout, (800 - layout.width) / 2f, 520);
 
         game.fontMedium.setColor(Color.WHITE);
-        drawCentered("Deaths: " + deaths, 430);
-        drawCentered("Enemies slain: " + kills, 395);
-        drawCentered("Time: " + formatTime(timeMillis), 360);
+        drawCentered(Lang.t("lbl_deaths") + ": " + deaths, 430);
+        drawCentered(Lang.t("lbl_enemies_slain") + ": " + kills, 395);
+        drawCentered(Lang.t("lbl_time") + ": " + formatTime(timeMillis), 360);
 
-        for (int i = 0; i < items.length; i++) {
+        String[] labels = { Lang.t("restart"), Lang.t("main_menu") };
+        for (int i = 0; i < ITEM_COUNT; i++) {
             game.fontMedium.setColor(i == selected ? new Color(0.85f, 0.7f, 0.15f, 1f) : Color.WHITE);
-            layout.setText(game.fontMedium, items[i]);
+            layout.setText(game.fontMedium, labels[i]);
             game.fontMedium.draw(game.batch, layout, (800 - layout.width) / 2f, TOP_Y - i * SPACING);
         }
         game.batch.end();
@@ -83,7 +85,7 @@ public class VictoryScreen extends ScreenAdapter {
     }
 
     private int rowAt(float worldY) {
-        for (int i = 0; i < items.length; i++) {
+        for (int i = 0; i < ITEM_COUNT; i++) {
             float center = TOP_Y - i * SPACING - 8f;
             if (worldY >= center - ROW_H / 2f && worldY <= center + ROW_H / 2f) return i;
         }

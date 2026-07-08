@@ -9,6 +9,9 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import HollowKnight.hollowknight.HollowKnightGame;
+import HollowKnight.hollowknight.model.Keybinds;
+import HollowKnight.hollowknight.model.Keybinds.Action;
+import HollowKnight.hollowknight.utils.Lang;
 
 public class GuideScreen extends ScreenAdapter {
     private static final float MARGIN = 50f;
@@ -18,24 +21,30 @@ public class GuideScreen extends ScreenAdapter {
     private final OrthographicCamera camera = new OrthographicCamera();
     private final GlyphLayout layout = new GlyphLayout();
 
-    private final String[] lines = {
-        "CONTROLS",
-        "Arrows - Move      Z - Jump / Double Jump      X - Attack      C - Dash",
-        "A - Focus (heal)      Q - Vengeful Spirit      W - Howling Wraiths",
-        "I - Inventory      Esc - Pause",
-        "",
-        "ABILITIES",
-        "Hit enemies with the Nail to gain SOUL. Spend SOUL to Focus (heal) or cast spells.",
-        "",
-        "CHEATS (hold Left Ctrl)",
-        "T Teleport   N Noclip   H Heal   R Refill Soul   G God Mode   K Kill All",
-        "",
-        "Esc - back"
-    };
-
     public GuideScreen(HollowKnightGame game) {
         this.game = game;
         camera.setToOrtho(false, 800, 600);
+    }
+
+    private String[] buildLines() {
+        Keybinds kb = Keybinds.get();
+        String move = kb.keyName(Action.LEFT) + "/" + kb.keyName(Action.RIGHT);
+        String look = kb.keyName(Action.UP) + "/" + kb.keyName(Action.DOWN);
+        return new String[] {
+            Lang.t("guide_controls_title"),
+            Lang.t("lbl_move") + " " + move + " | " + Lang.t("lbl_look") + " " + look + " | " + Lang.t("lbl_jump") + " " + kb.keyName(Action.JUMP) + " (" + Lang.t("guide_double") + ")",
+            Lang.t("lbl_attack") + " " + kb.keyName(Action.ATTACK) + " | " + Lang.t("lbl_dash") + " " + kb.keyName(Action.DASH) + " | " + Lang.t("lbl_focus") + " " + kb.keyName(Action.FOCUS),
+            Lang.t("lbl_spirit") + " " + kb.keyName(Action.CAST_SPIRIT) + " | " + Lang.t("lbl_wraiths") + " " + kb.keyName(Action.CAST_WRAITHS),
+            Lang.t("lbl_inventory") + " " + kb.keyName(Action.INVENTORY) + " | " + Lang.t("lbl_pause") + " Esc",
+            "",
+            Lang.t("guide_abilities_title"),
+            Lang.t("guide_ability_desc"),
+            "",
+            Lang.t("guide_cheats_title"),
+            Lang.t("guide_cheats_desc"),
+            "",
+            Lang.t("esc_back")
+        };
     }
 
     @Override
@@ -49,7 +58,7 @@ public class GuideScreen extends ScreenAdapter {
         game.fontMedium.setColor(Color.WHITE);
 
         float y = 560f;
-        for (String line : lines) {
+        for (String line : buildLines()) {
             if (line.isEmpty()) { y -= 18f; continue; }
             layout.setText(game.fontMedium, line, Color.WHITE, WRAP_W, Align.left, true);
             game.fontMedium.draw(game.batch, layout, MARGIN, y);
