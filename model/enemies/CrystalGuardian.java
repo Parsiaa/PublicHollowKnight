@@ -25,7 +25,7 @@ public class CrystalGuardian extends Enemy {
     private final Level level;
 
     public CrystalGuardian(float x, float y, Level level) {
-        super(x, y, 72f, 72f, 2, 11);
+        super(x, y, 150f, 150f, 2, 11);
         this.level = level;
     }
 

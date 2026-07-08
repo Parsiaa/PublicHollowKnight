@@ -213,6 +213,7 @@ public class GameScreen extends ScreenAdapter {
             applyState(loaded);
             hud.syncSoul();
         }
+        if (carry != null) player.invincibleTimer = 2.0f;
     }
 
     public int getSaveSlot() { return saveSlot; }

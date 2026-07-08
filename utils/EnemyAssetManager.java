@@ -49,6 +49,8 @@ public class EnemyAssetManager {
         setNormal(EnemyAnimationType.MOSSFLY_APPEAR);
         setNormal(EnemyAnimationType.MOSSFLY_TURN_TO_FLY);
         setNormal(EnemyAnimationType.HORNHEAD_DEATH_LAND);
+        setNormal(EnemyAnimationType.GUARDIAN_DEATH_AIR);
+        setNormal(EnemyAnimationType.GUARDIAN_DEATH_LAND);
     }
 
     private void setNormal(EnemyAnimationType type) {
