@@ -17,9 +17,9 @@ import HollowKnight.hollowknight.model.Settings;
 import HollowKnight.hollowknight.utils.Lang;
 
 public class SettingsScreen extends ScreenAdapter {
-    private static final float TOP = 470f, SPACING = 64f, ROW_H = 52f;
+    private static final float TOP = 486f, SPACING = 48f, ROW_H = 44f;
     private static final float TRACK_X = 420f, TRACK_W = 280f, TRACK_H = 10f;
-    private static final int ROWS = 8;
+    private static final int ROWS = 9;
 
     private final HollowKnightGame game;
     private final Screen back;
@@ -76,10 +76,15 @@ public class SettingsScreen extends ScreenAdapter {
             if (Gdx.input.isKeyJustPressed(Keys.LEFT))  { s.language = (s.language + Lang.COUNT - 1) % Lang.COUNT; s.save(); }
             if (Gdx.input.isKeyJustPressed(Keys.RIGHT)) Lang.cycle();
         }
+        if (selected == 6) {
+            if (Gdx.input.isKeyJustPressed(Keys.LEFT)) setBrightness(s.brightness - 0.05f);
+            if (Gdx.input.isKeyJustPressed(Keys.RIGHT)) setBrightness(s.brightness + 0.05f);
+        }
 
         if (Gdx.input.justTouched() && hov != -1) {
             selected = hov;
             if (hov == 0 || hov == 2) setVolume(hov, (tmp.x - TRACK_X) / TRACK_W);
+            else if (hov == 6) setBrightnessFromTrack(tmp.x);
             else activate(hov);
         }
         if (Gdx.input.isKeyJustPressed(Keys.ENTER)) activate(selected);
@@ -94,14 +99,29 @@ public class SettingsScreen extends ScreenAdapter {
         game.audio.applySettings();
     }
 
+    private float brightnessNorm() {
+        return (s.brightness - Settings.MIN_BRIGHTNESS) / (Settings.MAX_BRIGHTNESS - Settings.MIN_BRIGHTNESS);
+    }
+
+    private void setBrightness(float v) {
+        v = Math.max(Settings.MIN_BRIGHTNESS, Math.min(Settings.MAX_BRIGHTNESS, v));
+        s.brightness = v;
+        s.save();
+    }
+
+    private void setBrightnessFromTrack(float trackX) {
+        float t = (trackX - TRACK_X) / TRACK_W;
+        setBrightness(Settings.MIN_BRIGHTNESS + t * (Settings.MAX_BRIGHTNESS - Settings.MIN_BRIGHTNESS));
+    }
+
     private void activate(int row) {
         switch (row) {
             case 1: s.musicEnabled = !s.musicEnabled; break;
             case 3: s.sfxEnabled = !s.sfxEnabled; break;
             case 4: s.resetSfx(); break;
             case 5: Lang.cycle(); return;
-            case 6: game.setScreen(new KeybindsScreen(game, this)); return;
-            case 7: goBack(); return;
+            case 7: game.setScreen(new KeybindsScreen(game, this)); return;
+            case 8: goBack(); return;
             default: return;
         }
         s.save();
@@ -121,6 +141,7 @@ public class SettingsScreen extends ScreenAdapter {
         shape.begin(ShapeRenderer.ShapeType.Filled);
         drawSlider(0, s.musicVolume);
         drawSlider(2, s.sfxVolume);
+        drawSlider(6, brightnessNorm());
         shape.end();
 
         game.batch.setProjectionMatrix(cam.combined);
@@ -137,8 +158,9 @@ public class SettingsScreen extends ScreenAdapter {
         label(3, Lang.t("sfx"), s.sfxEnabled ? on : off);
         label(4, Lang.t("reset_sfx"), "");
         label(5, Lang.t("language"), Lang.langName());
-        label(6, Lang.t("controls"), "");
-        label(7, Lang.t("back"), "");
+        label(6, Lang.t("brightness"), Math.round(s.brightness * 100) + "%");
+        label(7, Lang.t("controls"), "");
+        label(8, Lang.t("back"), "");
 
         game.fontMedium.setColor(0.5f, 0.5f, 0.5f, 1f);
         layout.setText(game.fontMedium, Lang.t("settings_hint"));

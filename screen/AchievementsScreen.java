@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import HollowKnight.hollowknight.HollowKnightGame;
 import HollowKnight.hollowknight.controller.AchievementManager;
 import HollowKnight.hollowknight.model.Achievement;
+import HollowKnight.hollowknight.utils.Lang;
 
 public class AchievementsScreen extends ScreenAdapter {
     private final HollowKnightGame game;
@@ -31,14 +32,14 @@ public class AchievementsScreen extends ScreenAdapter {
         game.menuBackground.drawBackground(game.batch);
 
         game.fontLarge.setColor(0.85f, 0.7f, 0.15f, 1f);
-        game.fontLarge.draw(game.batch, "ACHIEVEMENTS", 230, 560);
+        game.fontLarge.draw(game.batch, Lang.t("achievements_title"), 230, 560);
 
         float y = 470f;
         for (Achievement a : Achievement.values()) {
             boolean got = achievements.isUnlocked(a);
             game.fontMedium.setColor(got ? new Color(0.85f, 0.7f, 0.15f, 1f)
                                          : new Color(0.4f, 0.4f, 0.4f, 1f));
-            String title = got ? a.title : a.title + "  [LOCKED]";
+            String title = got ? a.title : a.title + " " + Lang.t("locked");
             game.fontMedium.draw(game.batch, title, 120, y);
 
             if (got) {
@@ -49,7 +50,7 @@ public class AchievementsScreen extends ScreenAdapter {
         }
 
         game.fontMedium.setColor(0.5f, 0.5f, 0.5f, 1f);
-        game.fontMedium.draw(game.batch, "Esc - back", 120, 60);
+        game.fontMedium.draw(game.batch, Lang.t("esc_back"), 120, 60);
         game.batch.end();
     }
 }

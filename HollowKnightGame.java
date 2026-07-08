@@ -1,10 +1,15 @@
 package HollowKnight.hollowknight;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import HollowKnight.hollowknight.controller.SaveManager;
+import HollowKnight.hollowknight.model.Settings;
 import HollowKnight.hollowknight.screen.MainMenuScreen;
 import HollowKnight.hollowknight.utils.AudioManager;
 import HollowKnight.hollowknight.utils.EffectAssetManager;
@@ -31,10 +36,14 @@ public class HollowKnightGame extends Game {
 
     public MenuBackground menuBackground;
 
+    private ShapeRenderer brightnessOverlay;
+    private OrthographicCamera overlayCamera;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
+        brightnessOverlay = new ShapeRenderer();
+        overlayCamera = new OrthographicCamera();
 
         assetManager = new GameAssetManager();
         assetManager.loadAssets();
@@ -57,8 +66,30 @@ public class HollowKnightGame extends Game {
     }
 
     @Override
+    public void render() {
+        super.render();
+        drawBrightnessOverlay();
+    }
+
+    private void drawBrightnessOverlay() {
+        float b = Settings.get().brightness;
+        if (b == 1f) return;
+        float w = Gdx.graphics.getWidth();
+        float h = Gdx.graphics.getHeight();
+        overlayCamera.setToOrtho(false, w, h);
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        brightnessOverlay.setProjectionMatrix(overlayCamera.combined);
+        brightnessOverlay.begin(ShapeRenderer.ShapeType.Filled);
+        if (b < 1f) brightnessOverlay.setColor(0f, 0f, 0f, 1f - b);
+        else brightnessOverlay.setColor(1f, 1f, 1f, (b - 1f) * 0.8f);
+        brightnessOverlay.rect(0f, 0f, w, h);
+        brightnessOverlay.end();
+    }
+
+    @Override
     public void dispose() {
         if (getScreen() != null) getScreen().dispose();
+        if (brightnessOverlay != null) brightnessOverlay.dispose();
         batch.dispose();
         assetManager.dispose();
         enemyAssets.dispose();
