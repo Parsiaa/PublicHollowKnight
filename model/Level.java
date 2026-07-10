@@ -28,6 +28,7 @@ public class Level {
     private final List<Rectangle> spikes = new ArrayList<>();
     private final List<Rectangle> acid = new ArrayList<>();
     private final List<Rectangle> belts = new ArrayList<>();
+    private final List<Rectangle> secretRooms = new ArrayList<>();
     private final List<Rectangle> portalBounds = new ArrayList<>();
     private final List<String> portalTargets = new ArrayList<>();
     private Rectangle waterfall = null;
@@ -105,6 +106,7 @@ public class Level {
                 new BreakableWall(scaled.x, scaled.y, scaled.width, scaled.height));
             else if ("arena".equals(name)) arena = scaled;
             else if ("belt".equals(name)) { belts.add(scaled); platforms.add(scaled); }
+            else if ("secret".equals(name)) secretRooms.add(scaled);
             else if ("portal".equals(name)) {
                 portalBounds.add(scaled);
                 portalTargets.add(object.getProperties().get("target", "", String.class));
@@ -145,21 +147,54 @@ public class Level {
         int th = map.getProperties().get("tileheight", Integer.class);
         float tileW = tw * SCALE, tileH = th * SCALE;
         int colStart = (int) Math.floor(world.x / tileW);
-        int colEnd   = (int) Math.floor((world.x + world.width - 1f) / tileW);
+        int colEnd = (int) Math.floor((world.x + world.width - 1f) / tileW);
         int rowStart = (int) Math.floor(world.y / tileH);
-        int rowEnd   = (int) Math.floor((world.y + world.height - 1f) / tileH);
+        int rowEnd = (int) Math.floor((world.y + world.height - 1f) / tileH);
 
+        MapLayer target = map.getLayers().get("Breakable");
+        if (target instanceof TiledMapTileLayer) {
+            clearRegion((TiledMapTileLayer) target, colStart, colEnd, rowStart, rowEnd);
+            return;
+        }
         for (MapLayer layer : map.getLayers()) {
-            if (!(layer instanceof TiledMapTileLayer)) continue;
-            TiledMapTileLayer tileLayer = (TiledMapTileLayer) layer;
-            for (int col = colStart; col <= colEnd; col++) {
-                for (int row = rowStart; row <= rowEnd; row++) {
-                    if (col >= 0 && row >= 0 && col < tileLayer.getWidth() && row < tileLayer.getHeight()) {
-                        tileLayer.setCell(col, row, null);
-                    }
+            if (layer instanceof TiledMapTileLayer) {
+                clearRegion((TiledMapTileLayer) layer, colStart, colEnd, rowStart, rowEnd);
+            }
+        }
+    }
+
+    private void clearRegion(TiledMapTileLayer layer, int colStart, int colEnd, int rowStart, int rowEnd) {
+        for (int col = colStart; col <= colEnd; col++) {
+            for (int row = rowStart; row <= rowEnd; row++) {
+                if (col >= 0 && row >= 0 && col < layer.getWidth() && row < layer.getHeight()) {
+                    layer.setCell(col, row, null);
                 }
             }
         }
+    }
+
+    public List<Rectangle> getHiddenSecrets() {
+        List<Rectangle> hidden = new ArrayList<>();
+        for (Rectangle s : secretRooms) {
+            BreakableWall w = nearestWall(s);
+            if (w == null || !w.isBroken()) hidden.add(s);
+        }
+        return hidden;
+    }
+
+    private BreakableWall nearestWall(Rectangle s) {
+        BreakableWall best = null;
+        float bestDist = Float.MAX_VALUE;
+        float sx = s.x + s.width / 2f;
+        float sy = s.y + s.height / 2f;
+        for (BreakableWall w : breakableWalls) {
+            Rectangle b = w.getBounds();
+            float dx = (b.x + b.width / 2f) - sx;
+            float dy = (b.y + b.height / 2f) - sy;
+            float d = dx * dx + dy * dy;
+            if (d < bestDist) { bestDist = d; best = w; }
+        }
+        return best;
     }
 
     public void renderBackground(OrthographicCamera camera) {

@@ -406,6 +406,7 @@ public class GameScreen extends ScreenAdapter {
         wallRenderer.render(camera, level.getBreakableWalls());
 
         level.renderForeground(camera);
+        wallRenderer.renderSecrets(camera, level.getHiddenSecrets());
 
         hud.render(batch, player.getStateTime());
         batch.begin();
