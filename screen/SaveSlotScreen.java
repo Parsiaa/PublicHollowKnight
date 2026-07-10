@@ -116,12 +116,28 @@ public class SaveSlotScreen extends ScreenAdapter {
             String info = (d == null) ? "Empty - New Game"
                     : d.masks + " masks     " + d.soul + " soul     " + formatTime(d.playTimeMillis);
             game.fontMedium.draw(game.batch, info, ROW_X + 20f, c - 10f);
+
+            if (d != null) {
+                game.fontMedium.setColor(sel ? new Color(0.85f, 0.7f, 0.15f, 1f)
+                        : new Color(0.6f, 0.6f, 0.65f, 1f));
+                String ml = mapLabel(d.mapName);
+                layout.setText(game.fontMedium, ml);
+                game.fontMedium.draw(game.batch, ml, ROW_X + ROW_W - 20f - layout.width, c + 18f);
+            }
         }
 
         game.fontMedium.setColor(0.5f, 0.5f, 0.5f, 1f);
         layout.setText(game.fontMedium, "Enter/Click: play     Del: erase slot     Esc: back");
         game.fontMedium.draw(game.batch, layout, (800 - layout.width) / 2f, 70);
         game.batch.end();
+    }
+
+    private String mapLabel(String mapName) {
+        if (mapName == null || mapName.isEmpty()) return "Greenpath";
+        if (mapName.contains("Crystal")) return "Crystal Peaks";
+        if (mapName.contains("Greenpath")) return "Greenpath";
+        int dot = mapName.indexOf('.');
+        return dot > 0 ? mapName.substring(0, dot) : mapName;
     }
 
     private String formatTime(long millis) {
