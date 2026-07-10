@@ -259,6 +259,12 @@ public class GameScreen extends ScreenAdapter {
             consumeEffectRequests();
         }
 
+        int portalIndex = level.portalIndexAt(player.getBoundingBox());
+        if (portalIndex >= 0 && player.getCurrentState() != Entity.State.DEAD) {
+            goToPortal(level.getPortalTarget(portalIndex));
+            return;
+        }
+
         Entity.State s = player.getCurrentState();
         boolean attacking = s == Entity.State.ATTACKING || s == Entity.State.ATTACKING_ALT
                 || s == Entity.State.UP_SLASH || s == Entity.State.DOWN_SLASH;
@@ -282,12 +288,6 @@ public class GameScreen extends ScreenAdapter {
 
         if (level.getWaterfall() != null && player.getBoundingBox().overlaps(level.getWaterfall())) {
             game.audio.playBgm(BGM_CRYSTAL);
-        }
-
-        int portalIndex = level.portalIndexAt(player.getBoundingBox());
-        if (portalIndex >= 0 && player.getCurrentState() != Entity.State.DEAD) {
-            goToPortal(level.getPortalTarget(portalIndex));
-            return;
         }
 
         trackStats();
