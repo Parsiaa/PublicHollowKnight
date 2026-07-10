@@ -93,25 +93,51 @@ public class EnemyRenderer {
         draw(batch, g, type);
 
         Rectangle laser = g.getLaserBox();
-        if (laser != null) {
-            batch.end();
-            float cy = laser.y + laser.height / 2f;
+        if (laser == null) return;
+        Animation<TextureRegion> beam = assets.get(EnemyAnimationType.GUARDIAN_LASER);
+        if (beam != null) drawLaserSprites(batch, g, laser, beam);
+        else drawLaserShapes(batch, g, laser);
+    }
+
+    private void drawLaserSprites(SpriteBatch batch, CrystalGuardian g, Rectangle laser,
+                                  Animation<TextureRegion> beam) {
+        float cy = laser.y + laser.height / 2f;
+        float t = g.getStateTime();
+        TextureRegion bf = beam.getKeyFrame(t);
+        float beamH = laser.height * 3f;
+        batch.draw(bf.getTexture(), laser.x, cy - beamH / 2f, laser.width, beamH,
+                bf.getRegionX(), bf.getRegionY(), bf.getRegionWidth(), bf.getRegionHeight(),
+                !g.facingRight, false);
+
+        Animation<TextureRegion> circle = assets.get(EnemyAnimationType.GUARDIAN_LASER_CIRCLE);
+        if (circle != null) {
             float muzzleX = g.facingRight ? laser.x : laser.x + laser.width;
-            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(0.9f, 0.25f, 0.8f, 0.4f);
-            shapeRenderer.rect(laser.x, laser.y, laser.width, laser.height);
-            shapeRenderer.setColor(1f, 0.45f, 0.95f, 0.85f);
-            shapeRenderer.rect(laser.x, cy - laser.height * 0.28f, laser.width, laser.height * 0.56f);
-            shapeRenderer.setColor(1f, 0.92f, 1f, 1f);
-            shapeRenderer.rect(laser.x, cy - laser.height * 0.12f, laser.width, laser.height * 0.24f);
-            shapeRenderer.setColor(1f, 0.55f, 1f, 0.55f);
-            shapeRenderer.circle(muzzleX, cy, laser.height * 1.1f);
-            shapeRenderer.setColor(1f, 1f, 1f, 1f);
-            shapeRenderer.circle(muzzleX, cy, laser.height * 0.55f);
-            shapeRenderer.end();
-            batch.begin();
+            TextureRegion cf = circle.getKeyFrame(t);
+            float cs = laser.height * 3.2f;
+            batch.draw(cf.getTexture(), muzzleX - cs / 2f, cy - cs / 2f, cs, cs,
+                    cf.getRegionX(), cf.getRegionY(), cf.getRegionWidth(), cf.getRegionHeight(),
+                    false, false);
         }
+    }
+
+    private void drawLaserShapes(SpriteBatch batch, CrystalGuardian g, Rectangle laser) {
+        batch.end();
+        float cy = laser.y + laser.height / 2f;
+        float muzzleX = g.facingRight ? laser.x : laser.x + laser.width;
+        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(0.9f, 0.25f, 0.8f, 0.4f);
+        shapeRenderer.rect(laser.x, laser.y, laser.width, laser.height);
+        shapeRenderer.setColor(1f, 0.45f, 0.95f, 0.85f);
+        shapeRenderer.rect(laser.x, cy - laser.height * 0.28f, laser.width, laser.height * 0.56f);
+        shapeRenderer.setColor(1f, 0.92f, 1f, 1f);
+        shapeRenderer.rect(laser.x, cy - laser.height * 0.12f, laser.width, laser.height * 0.24f);
+        shapeRenderer.setColor(1f, 0.55f, 1f, 0.55f);
+        shapeRenderer.circle(muzzleX, cy, laser.height * 1.1f);
+        shapeRenderer.setColor(1f, 1f, 1f, 1f);
+        shapeRenderer.circle(muzzleX, cy, laser.height * 0.55f);
+        shapeRenderer.end();
+        batch.begin();
     }
 
     private void draw(SpriteBatch batch, Enemy enemy, EnemyAnimationType type) {

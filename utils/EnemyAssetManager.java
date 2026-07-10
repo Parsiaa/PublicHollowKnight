@@ -16,29 +16,32 @@ public class EnemyAssetManager {
 
     public void load() {
         for (EnemyAnimationType type : EnemyAnimationType.values()) {
+            try {
+                Texture texture = textures.computeIfAbsent(
+                        type.path,
+                        path -> new Texture(Gdx.files.internal(path)));
 
-            Texture texture = textures.computeIfAbsent(
-                    type.path,
-                    path -> new Texture(Gdx.files.internal(path)));
+                int frameW = texture.getWidth() / type.columnCount;
+                int frameH = texture.getHeight() / type.rowCount;
 
-            int frameW = texture.getWidth()  / type.columnCount;
-            int frameH = texture.getHeight() / type.rowCount;
+                TextureRegion[][] grid = TextureRegion.split(texture, frameW, frameH);
 
-            TextureRegion[][] grid = TextureRegion.split(texture, frameW, frameH);
-
-            TextureRegion[] frames = new TextureRegion[type.frameCount];
-            int idx = 0;
-            outer:
-            for (int r = 0; r < type.rowCount; r++) {
-                for (int c = 0; c < type.columnCount; c++) {
-                    if (idx >= type.frameCount) break outer;
-                    frames[idx++] = grid[r][c];
+                TextureRegion[] frames = new TextureRegion[type.frameCount];
+                int idx = 0;
+                outer:
+                for (int r = 0; r < type.rowCount; r++) {
+                    for (int c = 0; c < type.columnCount; c++) {
+                        if (idx >= type.frameCount) break outer;
+                        frames[idx++] = grid[r][c];
+                    }
                 }
-            }
 
-            Animation<TextureRegion> anim = new Animation<>(0.08f, frames);
-            anim.setPlayMode(Animation.PlayMode.LOOP);
-            animations.put(type, anim);
+                Animation<TextureRegion> anim = new Animation<>(0.08f, frames);
+                anim.setPlayMode(Animation.PlayMode.LOOP);
+                animations.put(type, anim);
+            } catch (Exception e) {
+                Gdx.app.error("EnemyAssetManager", "Failed to load " + type.path, e);
+            }
         }
 
         setNormal(EnemyAnimationType.CRAWLER_TURN);

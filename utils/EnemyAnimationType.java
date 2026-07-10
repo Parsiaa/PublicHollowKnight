@@ -30,7 +30,9 @@ public enum EnemyAnimationType {
     GUARDIAN_RUN        ("animation/Crystallized/Run.png",    6, 1, 6),
     GUARDIAN_TURN       ("animation/Crystallized/Turn.png",   3, 1, 3),
     GUARDIAN_DEATH_AIR  ("animation/Crystallized/Death Air.png",  3, 1, 3),
-    GUARDIAN_DEATH_LAND ("animation/Crystallized/Death Land.png", 3, 1, 3);
+    GUARDIAN_DEATH_LAND ("animation/Crystallized/Death Land.png", 3, 1, 3),
+    GUARDIAN_LASER ("animation/Effects/Laser.png", 15, 1, 15),
+    GUARDIAN_LASER_CIRCLE ("animation/Effects/LaserCircle_003.png", 1, 1, 1);
 
     public final String path;
     public final int    columnCount;
