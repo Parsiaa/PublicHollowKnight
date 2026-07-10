@@ -36,6 +36,7 @@ import HollowKnight.hollowknight.model.Zote;
 import HollowKnight.hollowknight.utils.EffectAnimationType;
 import HollowKnight.hollowknight.utils.FalseKnightAssetManager;
 import HollowKnight.hollowknight.view.AchievementPopup;
+import HollowKnight.hollowknight.view.BeltRenderer;
 import HollowKnight.hollowknight.view.DialogueBox;
 import HollowKnight.hollowknight.view.EnemyRenderer;
 import HollowKnight.hollowknight.view.FalseKnightRenderer;
@@ -105,6 +106,7 @@ public class GameScreen extends ScreenAdapter {
     private final EnemyRenderer enemyRenderer;
     private final ZoteRenderer zoteRenderer;
     private final WallRenderer wallRenderer;
+    private final BeltRenderer beltRenderer;
     private final HUD hud;
     private final InventoryMenu inventoryMenu;
     private final DialogueBox dialogueBox;
@@ -193,6 +195,7 @@ public class GameScreen extends ScreenAdapter {
 
         knightRenderer = new KnightRenderer(game.assetManager);
         wallRenderer = new WallRenderer();
+        beltRenderer = new BeltRenderer();
         hud = new HUD(player, VIEW_W, VIEW_H,
                 game.assetManager.getEmptyHealth(), game.assetManager.getFilledHealthShine(),
                 game.assetManager.getBreakHealth(), game.assetManager.getHealthRefill(),
@@ -396,6 +399,7 @@ public class GameScreen extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
+        beltRenderer.render(batch, level.getBelts(), (float) (playTimeMillis / 1000.0));
         enemyManager.render(batch);
         if (falseKnightRenderer != null && boss != null) falseKnightRenderer.render(batch, boss);
         knightRenderer.render(batch, player);
@@ -513,5 +517,6 @@ public class GameScreen extends ScreenAdapter {
         inventoryMenu.dispose();
         dialogueBox.dispose();
         wallRenderer.dispose();
+        beltRenderer.dispose();
     }
 }
