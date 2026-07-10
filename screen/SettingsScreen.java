@@ -28,7 +28,7 @@ public class SettingsScreen extends ScreenAdapter {
     private final GlyphLayout layout = new GlyphLayout();
     private final Vector3 tmp = new Vector3();
     private final Settings s = Settings.get();
-    
+
     private int selected = 0;
     private int prevMx, prevMy;
     private boolean disposed = false;
@@ -57,7 +57,7 @@ public class SettingsScreen extends ScreenAdapter {
 
     private void handleInput() {
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) { goBack(); return; }
-        if (Gdx.input.isKeyJustPressed(Keys.UP))   selected = (selected + ROWS - 1) % ROWS;
+        if (Gdx.input.isKeyJustPressed(Keys.UP)) selected = (selected + ROWS - 1) % ROWS;
         if (Gdx.input.isKeyJustPressed(Keys.DOWN)) selected = (selected + 1) % ROWS;
 
         int mx = Gdx.input.getX(), my = Gdx.input.getY();
@@ -69,11 +69,11 @@ public class SettingsScreen extends ScreenAdapter {
 
 
         if (selected == 0 || selected == 2) {
-            if (Gdx.input.isKeyJustPressed(Keys.LEFT))  setVolume(selected, volume(selected) - 0.05f);
+            if (Gdx.input.isKeyJustPressed(Keys.LEFT)) setVolume(selected, volume(selected) - 0.05f);
             if (Gdx.input.isKeyJustPressed(Keys.RIGHT)) setVolume(selected, volume(selected) + 0.05f);
         }
         if (selected == 5) {
-            if (Gdx.input.isKeyJustPressed(Keys.LEFT))  { s.language = (s.language + Lang.COUNT - 1) % Lang.COUNT; s.save(); }
+            if (Gdx.input.isKeyJustPressed(Keys.LEFT)) { s.language = (s.language + Lang.COUNT - 1) % Lang.COUNT; s.save(); }
             if (Gdx.input.isKeyJustPressed(Keys.RIGHT)) Lang.cycle();
         }
         if (selected == 6) {

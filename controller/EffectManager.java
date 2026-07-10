@@ -22,11 +22,11 @@ import HollowKnight.hollowknight.utils.EffectAssetManager;
 public class EffectManager {
 
     private static final float SLASH_DURATION = 0.27f;
-    private static final float DASH_DURATION = 0.36f; 
+    private static final float DASH_DURATION = 0.36f;
     private static final float SPIRIT_DURATION = 0.9f;
     private static final float SPIRIT_SPEED = 950f;
     private static final float WRAITHS_DURATION = 0.585f;
-    
+
     private static final int SPIRIT_DAMAGE = 15;
     private static final int WRAITHS_DAMAGE = 8;
 
@@ -150,7 +150,7 @@ public class EffectManager {
     }
 
     private void applyEffectDamage(VisualEffect fx, List<Enemy> enemies, Knight knight) {
-        boolean isSpirit  = fx.type == EffectAnimationType.VENGEFUL_SPIRIT;
+        boolean isSpirit = fx.type == EffectAnimationType.VENGEFUL_SPIRIT;
         boolean isWraiths = fx.type == EffectAnimationType.HOWLING_WRAITHS;
 
         for (Enemy enemy : enemies) {

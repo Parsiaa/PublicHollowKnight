@@ -27,7 +27,7 @@ public class GameAssetManager {
             int frameWidth = texture.getWidth() / type.columnCount;
             int frameHeight = texture.getHeight() / type.rowCount;
             TextureRegion[][] textureRegion2D = TextureRegion.split(texture, frameWidth, frameHeight);
-            
+
             TextureRegion[] textureRegion1D = new TextureRegion[type.frameCount];
             int index = 0;
 
@@ -46,13 +46,13 @@ public class GameAssetManager {
         emptyHealth = handleUiRegion("animation/HUD/EmptyHealth.png", 1, 1, 1).getKeyFrame(0);
         filledHealthShine = handleUiRegion("animation/HUD/FilledHealthShine.png", 5, 1, 5);
         filledHealthShine.setPlayMode(Animation.PlayMode.LOOP);
-        
+
         breakHealth = handleUiRegion("animation/HUD/BreakHealth.png", 6, 1, 6);
         breakHealth.setPlayMode(Animation.PlayMode.NORMAL);
-        
+
         healthRefill = handleUiRegion("animation/HUD/HealthRefill.png", 5, 1, 5);
         healthRefill.setPlayMode(Animation.PlayMode.NORMAL);
-        
+
         soulVesselFrame = handleUiRegion("animation/HUD/HUD Cln_167.png", 1, 1, 1).getKeyFrame(0);
         soulLiquid = handleUiRegion("animation/HUD/SoulOrb_Full.png", 1, 1, 1).getKeyFrame(0);
     }

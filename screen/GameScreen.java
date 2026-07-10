@@ -52,6 +52,7 @@ public class GameScreen extends ScreenAdapter {
     private static final String MAP_CRYSTAL = "CrystalPeaksMap.tmx";
     private static final String BGM = "audio/greenpath.wav";
     private static final String BGM_CRYSTAL = "audio/crystalpeaks.wav";
+    private static final String BGM_BOSS = "audio/falseknight.wav";
 
     private static String bgmForMap(String map) {
         return MAP_CRYSTAL.equals(map) ? BGM_CRYSTAL : BGM;
@@ -147,7 +148,7 @@ public class GameScreen extends ScreenAdapter {
         return (d != null && d.mapName != null && !d.mapName.isEmpty()) ? d.mapName : MAP_GREENPATH;
     }
 
-    private GameScreen(HollowKnightGame game, int saveSlot, String mapName, GameData carry) {
+    GameScreen(HollowKnightGame game, int saveSlot, String mapName, GameData carry) {
         this.game = game;
         this.batch = game.batch;
         this.saveSlot = saveSlot;
@@ -286,7 +287,9 @@ public class GameScreen extends ScreenAdapter {
             }
         }
 
-        if (level.getWaterfall() != null && player.getBoundingBox().overlaps(level.getWaterfall())) {
+        if (bossActive) {
+            game.audio.playBgm(BGM_BOSS);
+        } else if (level.getWaterfall() != null && player.getBoundingBox().overlaps(level.getWaterfall())) {
             game.audio.playBgm(BGM_CRYSTAL);
         }
 
@@ -385,9 +388,8 @@ public class GameScreen extends ScreenAdapter {
         carry.spawnX = 0f;
         carry.spawnY = 0f;
         carry.mapName = target;
-        GameScreen next = new GameScreen(game, saveSlot, target, carry);
         dispose();
-        game.setScreen(next);
+        game.setScreen(new TransitionScreen(game, saveSlot, target, carry));
     }
 
     public void renderWorld() {

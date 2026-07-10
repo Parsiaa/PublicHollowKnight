@@ -40,8 +40,8 @@ public class EnemyManager {
     }
 
     private void spawnEnemies() {
-        for (Vector2 pos : level.getMossflySpawns())  enemies.add(new Mossfly(pos.x, pos.y, level));
-        for (Vector2 pos : level.getCrawlerSpawns())  enemies.add(new CrystalCrawler(pos.x, pos.y, level));
+        for (Vector2 pos : level.getMossflySpawns()) enemies.add(new Mossfly(pos.x, pos.y, level));
+        for (Vector2 pos : level.getCrawlerSpawns()) enemies.add(new CrystalCrawler(pos.x, pos.y, level));
         for (Vector2 pos : level.getHornheadSpawns()) enemies.add(new HuskHornhead(pos.x, pos.y, level));
         for (Vector2 pos : level.getGuardianSpawns()) enemies.add(new CrystalGuardian(pos.x, pos.y, level));
     }

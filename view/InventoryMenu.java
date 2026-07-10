@@ -17,17 +17,17 @@ import HollowKnight.hollowknight.utils.FontFactory;
 
 public class InventoryMenu {
 
-    private static final int   CHARM_COUNT   = 8;
-    private static final float SLOT_SIZE     = 90f;
-    private static final float SLOT_PAD      = 20f;
-    private static final float GRID_COLS     = 4f;
-    private static final float ICON_SCALE    = 0.62f;
+    private static final int CHARM_COUNT = 8;
+    private static final float SLOT_SIZE = 90f;
+    private static final float SLOT_PAD = 20f;
+    private static final float GRID_COLS = 4f;
+    private static final float ICON_SCALE = 0.62f;
 
     private static final String[] CHARM_NAMES = {
-        "Soul Catcher",        "Dashmaster",
+        "Soul Catcher", "Dashmaster",
         "Unbreakable Strength","Quick Slash",
-        "Quick Focus",         "Heavy Blow",
-        "Sharp Shadow",        "Void Heart"
+        "Quick Focus", "Heavy Blow",
+        "Sharp Shadow", "Void Heart"
     };
 
     private static final String[] CHARM_DESC = {
@@ -41,25 +41,25 @@ public class InventoryMenu {
         "Spell damage increased by 50%"
     };
 
-    private final Knight  knight;
+    private final Knight knight;
     private final Texture[] charmIcons = new Texture[CHARM_COUNT];
     private final OrthographicCamera uiCamera;
     private final ShapeRenderer sr;
     private final BitmapFont font;
     private final GlyphLayout layout;
 
-    private boolean open        = false;
-    private int     hoveredSlot = -1;
+    private boolean open = false;
+    private int hoveredSlot = -1;
 
 
     private float gridOriginX, gridOriginY;
 
     public InventoryMenu(Knight knight, float screenW, float screenH) {
-        this.knight   = knight;
+        this.knight = knight;
         this.uiCamera = new OrthographicCamera();
         uiCamera.setToOrtho(false, screenW, screenH);
-        this.sr     = new ShapeRenderer();
-        this.font   = FontFactory.generate(HollowKnightGame.FONT_PATH, 18);
+        this.sr = new ShapeRenderer();
+        this.font = FontFactory.generate(HollowKnightGame.FONT_PATH, 18);
         this.layout = new GlyphLayout();
 
         font.setColor(Color.WHITE);
@@ -122,8 +122,8 @@ public class InventoryMenu {
         for (int i = 0; i < CHARM_COUNT; i++) {
             Rectangle slot = slotBounds(i);
             boolean equipped = knight.isCharmEquipped(i + 1);
-            boolean hovered  = (hoveredSlot == i);
-            boolean full     = (!equipped && knight.usedNotches >= Knight.MAX_NOTCHES);
+            boolean hovered = (hoveredSlot == i);
+            boolean full = (!equipped && knight.usedNotches >= Knight.MAX_NOTCHES);
 
             if (equipped) {
                 sr.setColor(0.85f, 0.7f, 0.15f, 1f);
@@ -145,7 +145,7 @@ public class InventoryMenu {
         for (int i = 0; i < CHARM_COUNT; i++) {
             Rectangle slot = slotBounds(i);
             boolean equipped = knight.isCharmEquipped(i + 1);
-            boolean full     = (!equipped && knight.usedNotches >= Knight.MAX_NOTCHES);
+            boolean full = (!equipped && knight.usedNotches >= Knight.MAX_NOTCHES);
 
             float alpha = full ? 0.35f : 1f;
             batch.setColor(1f, 1f, 1f, alpha);
@@ -200,8 +200,8 @@ public class InventoryMenu {
     private void drawNotchBar(ShapeRenderer sr) {
         float barW = 200f;
         float barH = 14f;
-        float bx   = (uiCamera.viewportWidth - barW) / 2f;
-        float by   = gridOriginY - 80f;
+        float bx = (uiCamera.viewportWidth - barW) / 2f;
+        float by = gridOriginY - 80f;
 
         sr.setColor(0.3f, 0.3f, 0.3f, 1f);
         sr.rect(bx, by, barW, barH);

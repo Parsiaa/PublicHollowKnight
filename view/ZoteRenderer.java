@@ -19,12 +19,12 @@ public class ZoteRenderer {
     public void render(SpriteBatch batch, Zote zote) {
         ZoteAnimationType type;
         switch (zote.getState()) {
-            case TALK:   type = ZoteAnimationType.ZOTE_TALK; break;
+            case TALK: type = ZoteAnimationType.ZOTE_TALK; break;
             case ATTACK: type = ZoteAnimationType.ZOTE_ATTACK; break;
-            case ROLL:   type = ZoteAnimationType.ZOTE_ROLL; break;
-            case FALL:   type = ZoteAnimationType.ZOTE_FALL; break;
+            case ROLL: type = ZoteAnimationType.ZOTE_ROLL; break;
+            case FALL: type = ZoteAnimationType.ZOTE_FALL; break;
             case GET_UP: type = ZoteAnimationType.ZOTE_GET_UP; break;
-            default:     type = ZoteAnimationType.ZOTE_IDLE; break;
+            default: type = ZoteAnimationType.ZOTE_IDLE; break;
         }
         Animation<TextureRegion> anim = assets.get(type);
         if (anim == null) return;

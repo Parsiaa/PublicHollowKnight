@@ -29,7 +29,7 @@ public class AchievementManager {
         }
     }
 
-    public void addListener(AchievementListener l)    { listeners.add(l); }
+    public void addListener(AchievementListener l) { listeners.add(l); }
     public void removeListener(AchievementListener l) { listeners.remove(l); }
 
     public boolean isUnlocked(Achievement a) { return unlocked.contains(a); }

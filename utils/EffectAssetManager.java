@@ -29,7 +29,7 @@ public class EffectAssetManager {
                 type.path,
                 path -> new Texture(Gdx.files.internal(path)));
 
-        int frameW = texture.getWidth()  / type.columnCount;
+        int frameW = texture.getWidth() / type.columnCount;
         int frameH = texture.getHeight() / type.rowCount;
 
         TextureRegion[][] grid = TextureRegion.split(texture, frameW, frameH);
