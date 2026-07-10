@@ -100,7 +100,10 @@ public class KnightController {
 
     private void handleInput(float deltaTime) {
         Entity.State state = knight.getCurrentState();
-        if (knight.castLockTimer > 0) return;
+        if (knight.castLockTimer > 0) {
+            knight.getVelocity().x = 0;
+            return;
+        }
 
         if (pressed(Action.FOCUS) && knight.onGround) {
             knight.getVelocity().x = 0;
