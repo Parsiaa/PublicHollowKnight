@@ -94,13 +94,20 @@ public class EnemyRenderer {
         Rectangle laser = g.getLaserBox();
         if (laser != null) {
             batch.end();
+            float cy = laser.y + laser.height / 2f;
+            float muzzleX = g.facingRight ? laser.x : laser.x + laser.width;
             shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(0.6f, 0.2f, 1.0f, 0.85f);
+            shapeRenderer.setColor(0.9f, 0.25f, 0.8f, 0.4f);
             shapeRenderer.rect(laser.x, laser.y, laser.width, laser.height);
-            shapeRenderer.setColor(0.9f, 0.7f, 1.0f, 0.5f);
-            shapeRenderer.rect(laser.x, laser.y + laser.height * 0.3f,
-                    laser.width, laser.height * 0.4f);
+            shapeRenderer.setColor(1f, 0.45f, 0.95f, 0.85f);
+            shapeRenderer.rect(laser.x, cy - laser.height * 0.28f, laser.width, laser.height * 0.56f);
+            shapeRenderer.setColor(1f, 0.92f, 1f, 1f);
+            shapeRenderer.rect(laser.x, cy - laser.height * 0.12f, laser.width, laser.height * 0.24f);
+            shapeRenderer.setColor(1f, 0.55f, 1f, 0.55f);
+            shapeRenderer.circle(muzzleX, cy, laser.height * 1.1f);
+            shapeRenderer.setColor(1f, 1f, 1f, 1f);
+            shapeRenderer.circle(muzzleX, cy, laser.height * 0.55f);
             shapeRenderer.end();
             batch.begin();
         }
