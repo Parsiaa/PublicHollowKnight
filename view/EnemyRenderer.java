@@ -83,6 +83,7 @@ public class EnemyRenderer {
         EnemyAnimationType type;
         switch (g.getState()) {
             case SHOOT: type = EnemyAnimationType.GUARDIAN_SHOOT; break;
+            case RUN: type = EnemyAnimationType.GUARDIAN_RUN; break;
             case EVADE: type = EnemyAnimationType.GUARDIAN_EVADE; break;
             case TURN: type = EnemyAnimationType.GUARDIAN_TURN; break;
             case DEATH_AIR: type = EnemyAnimationType.GUARDIAN_DEATH_AIR; break;
