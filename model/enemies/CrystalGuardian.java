@@ -10,22 +10,26 @@ public class CrystalGuardian extends Enemy {
 
     private State state = State.IDLE;
 
-    private static final float SIGHT_RANGE = 600f;
-    private static final float ENRAGE_SPEED = 280f;
+    private static final float SIGHT_RANGE = 900f;
+    private static final float VERTICAL_SIGHT = 180f;
+    private static final float AIM_TIME = 0.5f;
+    private static final float FIRE_TIME = 0.45f;
+    private static final float SHOOT_DURATION = AIM_TIME + FIRE_TIME;
+    private static final float ENRAGE_DURATION = 1.6f;
+    private static final float ENRAGE_SPEED = 320f;
+    private static final float REENGAGE_COOLDOWN = 0.9f;
+    private static final float LASER_THICKNESS = 48f;
     private static final float GRAVITY = 1800f;
-    private static final float SHOOT_DURATION = 0.56f;
-    private static final float ENRAGE_DURATION = 3.0f;
-    private static final float TURN_DURATION = 0.24f;
-    private static final float LASER_DURATION = 0.3f;
     private static final float CLIFF_PROBE = 8f;
 
-    private float stateLocalTimer = 0f;
+    private float stateTimer = 0f;
+    private float reengageTimer = 0f;
     private boolean deathLanded = false;
     private Rectangle laserBox = null;
     private final Level level;
 
     public CrystalGuardian(float x, float y, Level level) {
-        super(x, y, 150f, 150f, 2, 11);
+        super(x, y, 150f, 150f, 8, 11);
         this.level = level;
     }
 
@@ -33,7 +37,7 @@ public class CrystalGuardian extends Enemy {
     public Rectangle getLaserBox() { return laserBox; }
 
     private void setState(State s) {
-        if (state != s) { state = s; stateLocalTimer = 0f; resetStateTime(); }
+        if (state != s) { state = s; stateTimer = 0f; resetStateTime(); }
     }
 
     @Override
@@ -48,12 +52,13 @@ public class CrystalGuardian extends Enemy {
             return;
         }
 
+        if (reengageTimer > 0f) reengageTimer -= dt;
+
         switch (state) {
-            case IDLE:  updateIdle(dt, playerBounds);  break;
+            case IDLE: updateIdle(dt, playerBounds); break;
             case SHOOT: updateShoot(dt, playerBounds); break;
-            case EVADE: updateEvade(dt, playerBounds); break;
-            case TURN:  updateTurn(dt);                break;
-            default:    break;
+            case EVADE: updateEvade(dt); break;
+            default: break;
         }
         applyGravity(dt);
         tickStateTime(dt);
@@ -61,41 +66,40 @@ public class CrystalGuardian extends Enemy {
 
     private void updateIdle(float dt, Rectangle playerBounds) {
         velocity.x = 0;
-        if (seesPlayer(playerBounds)) setState(State.SHOOT);
+        facePlayer(playerBounds);
+        if (reengageTimer <= 0f && seesPlayer(playerBounds)) {
+            laserBox = null;
+            setState(State.SHOOT);
+        }
     }
 
     private void updateShoot(float dt, Rectangle playerBounds) {
-        stateLocalTimer += dt;
         velocity.x = 0;
-        laserBox = (stateLocalTimer <= LASER_DURATION) ? buildLaser() : null;
-        if (stateLocalTimer >= SHOOT_DURATION) {
+        stateTimer += dt;
+        if (stateTimer >= AIM_TIME && stateTimer < SHOOT_DURATION) laserBox = buildLaser();
+        else laserBox = null;
+        if (stateTimer >= SHOOT_DURATION) {
             laserBox = null;
+            float px = playerBounds.x + playerBounds.width / 2f;
+            float cx = boundingBox.x + boundingBox.width / 2f;
+            facingRight = px > cx;
             setState(State.EVADE);
         }
     }
 
-    private void updateEvade(float dt, Rectangle playerBounds) {
-        stateLocalTimer += dt;
-        float px = playerBounds.x + playerBounds.width / 2f;
-        float ex = boundingBox.x + boundingBox.width / 2f;
-        boolean playerIsRight = px > ex;
-        if (playerIsRight != facingRight) { startTurn(); return; }
-
+    private void updateEvade(float dt) {
+        stateTimer += dt;
         float speed = facingRight ? ENRAGE_SPEED : -ENRAGE_SPEED;
         float nextX = boundingBox.x + speed * dt;
-
-        if (hitWall(nextX) || atCliff(nextX)) { startTurn(); return; }
-        boundingBox.x = nextX;
-        velocity.x = speed;
-
-        if (stateLocalTimer >= ENRAGE_DURATION) setState(State.IDLE);
-    }
-
-    private void updateTurn(float dt) {
-        stateLocalTimer += dt;
-        if (stateLocalTimer >= TURN_DURATION) {
-            facingRight = !facingRight;
-            setState(State.EVADE);
+        if (!hitWall(nextX) && !atCliff(nextX)) {
+            boundingBox.x = nextX;
+            velocity.x = speed;
+        } else {
+            velocity.x = 0;
+        }
+        if (stateTimer >= ENRAGE_DURATION) {
+            reengageTimer = REENGAGE_COOLDOWN;
+            setState(State.IDLE);
         }
     }
 
@@ -134,20 +138,23 @@ public class CrystalGuardian extends Enemy {
         }
     }
 
+    private void facePlayer(Rectangle p) {
+        float px = p.x + p.width / 2f;
+        float cx = boundingBox.x + boundingBox.width / 2f;
+        facingRight = px > cx;
+    }
+
+    private boolean seesPlayer(Rectangle p) {
+        float sx = facingRight ? boundingBox.x + boundingBox.width : boundingBox.x - SIGHT_RANGE;
+        float cy = boundingBox.y + boundingBox.height / 2f;
+        Rectangle sight = new Rectangle(sx, cy - VERTICAL_SIGHT / 2f, SIGHT_RANGE, VERTICAL_SIGHT);
+        return sight.overlaps(p);
+    }
+
     private Rectangle buildLaser() {
-        float laserLen = SIGHT_RANGE;
-        float lx = facingRight ? boundingBox.x + boundingBox.width : boundingBox.x - laserLen;
-        float ly = boundingBox.y + boundingBox.height / 2f - 6f;
-        return new Rectangle(lx, ly, laserLen, 12f);
-    }
-
-    private boolean seesPlayer(Rectangle playerBounds) {
-        return getLaserSightBox().overlaps(playerBounds);
-    }
-
-    private Rectangle getLaserSightBox() {
+        float cy = boundingBox.y + boundingBox.height / 2f;
         float lx = facingRight ? boundingBox.x + boundingBox.width : boundingBox.x - SIGHT_RANGE;
-        return new Rectangle(lx, boundingBox.y, SIGHT_RANGE, boundingBox.height);
+        return new Rectangle(lx, cy - LASER_THICKNESS / 2f, SIGHT_RANGE, LASER_THICKNESS);
     }
 
     private boolean hitWall(float nextX) {
@@ -165,11 +172,21 @@ public class CrystalGuardian extends Enemy {
         return true;
     }
 
-    private void startTurn() {
-        setState(State.TURN);
+    @Override
+    protected void onDeath() {
         velocity.x = 0;
+        deathLanded = false;
+        laserBox = null;
+        setState(State.DEATH_AIR);
     }
 
-    @Override protected void onDeath()   { velocity.x = 0; deathLanded = false; setState(State.DEATH_AIR); }
-    @Override protected void onRespawn() { state = State.IDLE; deathLanded = false; facingRight = true; laserBox = null; }
+    @Override
+    protected void onRespawn() {
+        state = State.IDLE;
+        deathLanded = false;
+        facingRight = true;
+        laserBox = null;
+        reengageTimer = 0f;
+        stateTimer = 0f;
+    }
 }

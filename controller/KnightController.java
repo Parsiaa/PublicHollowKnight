@@ -20,6 +20,7 @@ public class KnightController {
     private static final float DASH_SPEED = 800f * SCALE;
     private static final float DASH_DURATION = 0.2f;
     private static final float WALL_SLIDE_SPEED = -100f * SCALE;
+    private static final float BELT_UP_SPEED = 160f * SCALE;
 
     private static final int SPELL_SOUL_COST = 33;
     private static final float CAST_LOCK_DURATION = 0.4f;
@@ -249,12 +250,16 @@ public class KnightController {
             knight.getVelocity().y = 0;
             if (knight.dashTimer <= 0) knight.setCurrentState(Entity.State.FALLING);
         } else {
-            boolean wallSliding = knight.isAgainstWall && knight.getVelocity().y < 0
-                    && ((knight.isFacingRight() && pressed(Action.RIGHT))
-                     || (!knight.isFacingRight() && pressed(Action.LEFT)));
-            knight.getVelocity().y = wallSliding
-                    ? WALL_SLIDE_SPEED
-                    : knight.getVelocity().y - GRAVITY * deltaTime;
+            boolean pressingIntoWall = (knight.isFacingRight() && pressed(Action.RIGHT))
+                    || (!knight.isFacingRight() && pressed(Action.LEFT));
+            if (knight.isAgainstWall && pressingIntoWall && touchingBelt()) {
+                knight.getVelocity().y = BELT_UP_SPEED;
+            } else {
+                boolean wallSliding = knight.isAgainstWall && knight.getVelocity().y < 0 && pressingIntoWall;
+                knight.getVelocity().y = wallSliding
+                        ? WALL_SLIDE_SPEED
+                        : knight.getVelocity().y - GRAVITY * deltaTime;
+            }
         }
 
         bounds.x += knight.getVelocity().x * deltaTime;
@@ -338,6 +343,15 @@ public class KnightController {
             knight.getBoundingBox().setPosition(
                     level.getLastSafePosition().x, level.getLastSafePosition().y);
         }
+    }
+
+    private boolean touchingBelt() {
+        Rectangle b = knight.getBoundingBox();
+        float probeX = knight.isFacingRight() ? b.x + b.width : b.x - 4f;
+        Rectangle probe = new Rectangle(probeX, b.y, 4f, b.height);
+        for (Rectangle belt : level.getBelts())
+            if (probe.overlaps(belt)) return true;
+        return false;
     }
 
     private void updateSafePosition() {

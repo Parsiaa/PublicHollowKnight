@@ -27,6 +27,7 @@ public class Level {
     private final List<Rectangle> platforms = new ArrayList<>();
     private final List<Rectangle> spikes = new ArrayList<>();
     private final List<Rectangle> acid = new ArrayList<>();
+    private final List<Rectangle> belts = new ArrayList<>();
     private final List<Rectangle> portalBounds = new ArrayList<>();
     private final List<String> portalTargets = new ArrayList<>();
     private Rectangle waterfall = null;
@@ -103,6 +104,7 @@ public class Level {
             else if ("breakable".equals(name)) breakableWalls.add(
                 new BreakableWall(scaled.x, scaled.y, scaled.width, scaled.height));
             else if ("arena".equals(name)) arena = scaled;
+            else if ("belt".equals(name)) { belts.add(scaled); platforms.add(scaled); }
             else if ("portal".equals(name)) {
                 portalBounds.add(scaled);
                 portalTargets.add(object.getProperties().get("target", "", String.class));
@@ -173,6 +175,7 @@ public class Level {
     public List<Rectangle> getPlatforms() { return platforms; }
     public List<Rectangle> getSpikes() { return spikes; }
     public List<Rectangle> getAcid() { return acid; }
+    public List<Rectangle> getBelts() { return belts; }
 
     public int portalIndexAt(Rectangle box) {
         for (int i = 0; i < portalBounds.size(); i++) {
