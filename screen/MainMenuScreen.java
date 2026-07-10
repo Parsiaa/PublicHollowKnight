@@ -15,7 +15,7 @@ import HollowKnight.hollowknight.utils.Lang;
 
 public class MainMenuScreen extends ScreenAdapter {
     private static final float ROW_H = 50f, TOP_Y = 420f, SPACING = 60f;
-    private static final String BGM = "audio/menu.ogg";
+    private static final String BGM = "audio/HollowKnight.mp3";
     private static final String SFX_MOVE = "audio/sfx/ui_change_selection.wav";
     private static final String SFX_CONFIRM = "audio/sfx/ui_button_confirm.wav";
 

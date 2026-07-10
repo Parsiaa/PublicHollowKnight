@@ -52,7 +52,7 @@ public class GameScreen extends ScreenAdapter {
     private static final String MAP_CRYSTAL = "CrystalPeaksMap.tmx";
     private static final String BGM = "audio/greenpath.wav";
     private static final String BGM_CRYSTAL = "audio/crystalpeaks.wav";
-    private static final String BGM_BOSS = "audio/falseknight.wav";
+    private static final String BGM_BOSS = "audio/FalseKnight.mp3";
 
     private static String bgmForMap(String map) {
         return MAP_CRYSTAL.equals(map) ? BGM_CRYSTAL : BGM;
